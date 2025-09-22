@@ -1,0 +1,735 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot name="Robot_urdf">
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="-0.0465725557132797 -2.93480324367211E-16 -0.116264725139818"
+        rpy="0 0 0" />
+      <mass
+        value="464.139758394477" />
+      <inertia
+        ixx="99.2338170738512"
+        ixy="7.62952138134667E-15"
+        ixz="-12.243030847228"
+        iyy="370.009907284758"
+        iyz="-1.72096773168008E-14"
+        izz="443.675964397563" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Robot_urdf/meshes/visual/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Robot_urdf/meshes/visual/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="steer_front_left_link">
+    <inertial>
+      <origin
+        xyz="2.22044604925031E-16 0 -0.413519569269691"
+        rpy="0 0 0" />
+      <mass
+        value="31.8221237390821" />
+      <inertia
+        ixx="2.11863450177457"
+        ixy="1.62197692698052E-16"
+        ixz="-5.30195135585272E-17"
+        iyy="1.92966971427727"
+        iyz="3.18597770246443E-17"
+        izz="0.393108548207387" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Robot_urdf/meshes/visual/steer_front_left_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Robot_urdf/meshes/visual/steer_front_left_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="steer_front_left_link_j"
+    type="continuous">
+    <origin
+      xyz="1.2009 0.62 -0.45"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="steer_front_left_link" />
+    <axis
+      xyz="0 0 -1" />
+  </joint>
+  <link
+    name="drive_front_left_link">
+    <inertial>
+      <origin
+        xyz="0 0.0500000000000002 -2.22044604925031E-16"
+        rpy="0 0 0" />
+      <mass
+        value="50.2654824574367" />
+      <inertia
+        ixx="2.05250720034533"
+        ixy="-9.61409668274795E-16"
+        ixz="-1.93710788150743E-16"
+        iyy="4.02123859659493"
+        iyz="-1.70737298010986E-17"
+        izz="2.05250720034533" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Robot_urdf/meshes/visual/drive_front_left_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Robot_urdf/meshes/visual/drive_front_left_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="drive_front_left_link_j"
+    type="continuous">
+    <origin
+      xyz="0 -0.05 -0.79"
+      rpy="0 0 0" />
+    <parent
+      link="steer_front_left_link" />
+    <child
+      link="drive_front_left_link" />
+    <axis
+      xyz="0 -1 0" />
+  </joint>
+  <link
+    name="steer_front_right_link">
+    <inertial>
+      <origin
+        xyz="-2.22044604925031E-16 -1.11022302462516E-16 -0.413519569269691"
+        rpy="0 0 0" />
+      <mass
+        value="31.8221237390821" />
+      <inertia
+        ixx="2.11863450177457"
+        ixy="-1.57170518626472E-17"
+        ixz="-2.99117991640178E-19"
+        iyy="1.92966971427727"
+        iyz="-2.80363590584755E-18"
+        izz="0.393108548207388" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Robot_urdf/meshes/visual/steer_front_right_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Robot_urdf/meshes/visual/steer_front_right_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="steer_front_right_link_j"
+    type="continuous">
+    <origin
+      xyz="1.2009 -0.62 -0.45"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="steer_front_right_link" />
+    <axis
+      xyz="0 0 -1" />
+  </joint>
+  <link
+    name="drive_front_right_link">
+    <inertial>
+      <origin
+        xyz="0 0.0499999999999999 -2.22044604925031E-16"
+        rpy="0 0 0" />
+      <mass
+        value="50.2654824574367" />
+      <inertia
+        ixx="2.05250720034533"
+        ixy="-2.15428176892479E-16"
+        ixz="-1.47451495458029E-16"
+        iyy="4.02123859659493"
+        iyz="-2.53528834134516E-17"
+        izz="2.05250720034533" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Robot_urdf/meshes/visual/drive_front_right_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Robot_urdf/meshes/visual/drive_front_right_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="drive_front_right_link_j"
+    type="continuous">
+    <origin
+      xyz="0 -0.05 -0.79"
+      rpy="0 0 0" />
+    <parent
+      link="steer_front_right_link" />
+    <child
+      link="drive_front_right_link" />
+    <axis
+      xyz="0 -1 0" />
+  </joint>
+  <link
+    name="steer_back_left_link">
+    <inertial>
+      <origin
+        xyz="0 0 -0.413519569269691"
+        rpy="0 0 0" />
+      <mass
+        value="31.8221237390821" />
+      <inertia
+        ixx="2.11863450177457"
+        ixy="1.82792851751206E-16"
+        ixz="7.87112037307036E-17"
+        iyy="1.92966971427727"
+        iyz="3.81738289843737E-17"
+        izz="0.393108548207387" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Robot_urdf/meshes/visual/steer_back_left_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Robot_urdf/meshes/visual/steer_back_left_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="steer_back_left_link_j"
+    type="continuous">
+    <origin
+      xyz="-1.1891 0.62 -0.45"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="steer_back_left_link" />
+    <axis
+      xyz="0 0 -1" />
+  </joint>
+  <link
+    name="drive_back_left_link">
+    <inertial>
+      <origin
+        xyz="0 0.0500000000000002 0"
+        rpy="0 0 0" />
+      <mass
+        value="50.2654824574368" />
+      <inertia
+        ixx="2.05250720034533"
+        ixy="-1.65953769400635E-15"
+        ixz="-3.70074341541719E-16"
+        iyy="4.02123859659494"
+        iyz="-1.58625276241255E-17"
+        izz="2.05250720034534" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Robot_urdf/meshes/visual/drive_back_left_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Robot_urdf/meshes/visual/drive_back_left_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="drive_back_left_link_j"
+    type="continuous">
+    <origin
+      xyz="0 -0.05 -0.79"
+      rpy="0 0 0" />
+    <parent
+      link="steer_back_left_link" />
+    <child
+      link="drive_back_left_link" />
+    <axis
+      xyz="0 -1 0" />
+  </joint>
+  <link
+    name="steer_back_right_link">
+    <inertial>
+      <origin
+        xyz="-2.22044604925031E-16 0 -0.413519569269691"
+        rpy="0 0 0" />
+      <mass
+        value="31.822123739082" />
+      <inertia
+        ixx="2.11863450177457"
+        ixy="-3.65507846704685E-17"
+        ixz="2.29020411388488E-16"
+        iyy="1.92966971427727"
+        iyz="-1.82754635940051E-17"
+        izz="0.393108548207387" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Robot_urdf/meshes/visual/steer_back_right_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Robot_urdf/meshes/visual/steer_back_right_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="steer_back_right_link_j"
+    type="continuous">
+    <origin
+      xyz="-1.1891 -0.62 -0.45"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="steer_back_right_link" />
+    <axis
+      xyz="0 0 -1" />
+  </joint>
+  <link
+    name="drive_back_right_link">
+    <inertial>
+      <origin
+        xyz="0 0.0499999999999999 0"
+        rpy="0 0 0" />
+      <mass
+        value="50.2654824574367" />
+      <inertia
+        ixx="2.05250720034533"
+        ixy="5.56928548429207E-17"
+        ixz="7.2280144832367E-18"
+        iyy="4.02123859659493"
+        iyz="-7.46409543899459E-19"
+        izz="2.05250720034533" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Robot_urdf/meshes/visual/drive_back_right_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Robot_urdf/meshes/visual/drive_back_right_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="drive_back_right_link_j"
+    type="continuous">
+    <origin
+      xyz="0 -0.05 -0.79"
+      rpy="0 0 0" />
+    <parent
+      link="steer_back_right_link" />
+    <child
+      link="drive_back_right_link" />
+    <axis
+      xyz="0 -1 0" />
+  </joint>
+  <link
+    name="Left_camera_link">
+    <inertial>
+      <origin
+        xyz="-0.0192505831113037 8.840691791967E-07 -0.000853423808698739"
+        rpy="0 0 0" />
+      <mass
+        value="0.170322634289251" />
+      <inertia
+        ixx="0.00038295573326243"
+        ixy="3.24590581191137E-09"
+        ixz="-3.32032534969148E-07"
+        iyy="3.25735374572707E-05"
+        iyz="1.49879134412887E-09"
+        izz="0.000390602341007197" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Robot_urdf/meshes/visual/Left_camera_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Robot_urdf/meshes/visual/Left_camera_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="Left_camera_link_j"
+    type="fixed">
+    <origin
+      xyz="1.136 0.28767 0.11513"
+      rpy="0 0.034907 0.2618" />
+    <parent
+      link="base_link" />
+    <child
+      link="Left_camera_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="right_camera_link">
+    <inertial>
+      <origin
+        xyz="-0.0192505830109166 9.14524050432686E-07 -0.00085342523084625"
+        rpy="0 0 0" />
+      <mass
+        value="0.170322633624158" />
+      <inertia
+        ixx="0.000382955707279669"
+        ixy="3.25437023567629E-09"
+        ixz="-3.32031556906543E-07"
+        iyy="3.25735374652719E-05"
+        iyz="1.49959851597051E-09"
+        izz="0.000390602315124212" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Robot_urdf/meshes/visual/right_camera_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Robot_urdf/meshes/visual/right_camera_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_camera_link_j"
+    type="fixed">
+    <origin
+      xyz="1.136 -0.28767 0.11513"
+      rpy="0 0.034907 -0.2618" />
+    <parent
+      link="base_link" />
+    <child
+      link="right_camera_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="tow_link">
+    <inertial>
+      <origin
+        xyz="-1.94380750072301 0.000298673408522626 0.704786860499349"
+        rpy="0 0 0" />
+      <mass
+        value="359.93936151353" />
+      <inertia
+        ixx="110.928132962926"
+        ixy="0.107499206749833"
+        ixz="-2.13510593134076"
+        iyy="260.066986748289"
+        iyz="-0.00176075130579262"
+        izz="266.975973034899" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Robot_urdf/meshes/visual/tow_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Robot_urdf/meshes/visual/tow_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="tow_link_j"
+    type="continuous">
+    <origin
+      xyz="-1.2641 0 -1.16"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="tow_link" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+  <link
+    name="left_wheel_link">
+    <inertial>
+      <origin
+        xyz="4.50528346629397E-07 0.00235156398011982 6.74949824919224E-07"
+        rpy="0 0 0" />
+      <mass
+        value="28.0847226026861" />
+      <inertia
+        ixx="2.90555283785165"
+        ixy="1.61831383029954E-06"
+        ixz="8.40990820831575E-07"
+        iyy="5.10686061141816"
+        iyz="2.42124360932871E-06"
+        izz="2.90554839061851" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Robot_urdf/meshes/visual/left_wheel_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Robot_urdf/meshes/visual/left_wheel_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_wheel_link_j"
+    type="continuous">
+    <origin
+      xyz="-1.985 0.74861 0.06"
+      rpy="0 0 0" />
+    <parent
+      link="tow_link" />
+    <child
+      link="left_wheel_link" />
+    <axis
+      xyz="0 1 0" />
+  </joint>
+  <link
+    name="right_wheel_link">
+    <inertial>
+      <origin
+        xyz="-2.56363618333921E-07 0.00235156398012015 7.69942045675265E-07"
+        rpy="0 0 0" />
+      <mass
+        value="28.084722602686" />
+      <inertia
+        ixx="2.9055492508173"
+        ixy="-9.18340703368884E-07"
+        ixz="1.94751846341549E-06"
+        iyy="5.10686061141815"
+        iyz="2.76369510503212E-06"
+        izz="2.90555197765286" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Robot_urdf/meshes/visual/right_wheel_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Robot_urdf/meshes/visual/right_wheel_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_wheel_link_j"
+    type="continuous">
+    <origin
+      xyz="-1.985 -0.74861 0.06"
+      rpy="0 0 0" />
+    <parent
+      link="tow_link" />
+    <child
+      link="right_wheel_link" />
+    <axis
+      xyz="0 1 0" />
+  </joint>
+</robot>

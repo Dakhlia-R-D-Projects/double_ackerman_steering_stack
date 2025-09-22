@@ -1,0 +1,9 @@
+/**:
+  ros__parameters:
+    # Vehicle dimensions
+    wheel_base: 0.8  # Distance between front and rear wheels in meters
+    track_width: 0.6  # Distance between left and right wheels in meters
+    wheel_radius: 0.15  # Wheel radius in meters
+    # Safety limits
+    max_steering_angle: 0.6  # Maximum steering angle in radians (about 34 degrees)
+    max_wheel_speed: 10.0  # Maximum wheel angular velocity in rad/s

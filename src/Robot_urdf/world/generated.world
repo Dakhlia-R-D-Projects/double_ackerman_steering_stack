@@ -1,0 +1,797 @@
+<?xml version="1.0"?>
+<!-- Seed: 4020 -->
+<sdf version="1.9">
+  <world name="virtual_maize_field">
+    <!-- Change max step size to increase the simulation speed but decrease the accuracy. -->
+    <physics type="ode">
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1.0</real_time_factor>
+      <real_time_update_rate>2000</real_time_update_rate>
+      <ode>
+        <solver>
+          <type>quick</type>
+          <iters>1000</iters>
+          <precon_iters>0</precon_iters>
+          <sor>1.400000</sor>
+          <use_dynamic_moi_rescaling>1</use_dynamic_moi_rescaling>
+        </solver>
+        <constraints>
+          <cfm>0.00001</cfm>
+          <erp>0.2</erp>
+          <contact_max_correcting_vel>2000.000000</contact_max_correcting_vel>
+          <contact_surface_layer>0.01000</contact_surface_layer>
+        </constraints>
+      </ode>-
+    </physics>
+    <render_engine>ogre2</render_engine>
+    <!-- <plugin name='gz::sim::systems::JointController' filename='gz-sim-joint-controller-system'/> -->
+    <plugin name='gz::sim::systems::Physics' filename='gz-sim-physics-system'/>
+    <plugin name='gz::sim::systems::UserCommands' filename='gz-sim-user-commands-system'/>
+    <plugin name='gz::sim::systems::SceneBroadcaster' filename='gz-sim-scene-broadcaster-system'/>
+    <plugin name='gz::sim::systems::Contact' filename='gz-sim-contact-system'/>
+    <plugin name='gz::sim::systems::Imu' filename='gz-sim-imu-system'/>
+    <plugin name='gz::sim::systems::AirPressure' filename='gz-sim-air-pressure-system'/>
+    <plugin name='gz::sim::systems::ForceTorque' filename='gz-sim-forcetorque-system'/>
+    <plugin filename="gz-sim-navsat-system" name="gz::sim::systems::NavSat"/>
+    <plugin filename="gz-sim-sensors-system" name="gz::sim::systems::Sensors">
+      <render_engine>ogre2</render_engine>
+    </plugin>
+
+    <gui fullscreen="0">
+        <!-- 3D scene -->
+      <plugin filename="GzScene3D" name="3D View">
+      <ignition-gui>
+          <title>3D View</title>
+          <property type="bool" key="showTitleBar">false</property>
+          <property type="string" key="state">docked</property>
+      </ignition-gui>
+
+    <engine>ogre2</engine>
+      <scene>scene</scene>
+      <ambient_light>1.0 1.0 1.0</ambient_light>
+      <background_color>0.8 0.8 0.8</background_color>
+      <camera_pose>-6 0 6 0 0.5 0</camera_pose>
+    </plugin>
+
+    <!-- World control -->
+    <plugin filename="WorldControl" name="World control">
+      <ignition-gui>
+        <title>World control</title>
+        <property type="bool" key="showTitleBar">false</property>
+        <property type="bool" key="resizable">false</property>
+        <property type="double" key="height">72</property>
+        <property type="double" key="width">121</property>
+        <property type="double" key="z">1</property>
+
+        <property type="string" key="state">floating</property>
+        <anchors target="3D View">
+          <line own="left" target="left"/>
+          <line own="bottom" target="bottom"/>
+        </anchors>
+      </ignition-gui>
+
+      <play_pause>true</play_pause>
+      <step>true</step>
+      <service>/world/virtual_maize_field/control</service>
+      <stats_topic>/world/virtual_maize_field/stats</stats_topic>
+
+    </plugin>
+
+    <!-- World statistics -->
+    <plugin filename="WorldStats" name="World stats">
+        <ignition-gui>
+            <title>World stats</title>
+            <property type="bool" key="showTitleBar">false</property>
+            <property type="bool" key="resizable">false</property>
+            <property type="double" key="height">110</property>
+            <property type="double" key="width">290</property>
+            <property type="double" key="z">1</property>
+
+            <property type="string" key="state">floating</property>
+            <anchors target="3D View">
+            <line own="right" target="right"/>
+            <line own="bottom" target="bottom"/>
+            </anchors>
+        </ignition-gui>
+
+        <sim_time>true</sim_time>
+        <real_time>true</real_time>
+        <real_time_factor>true</real_time_factor>
+        <iterations>true</iterations>
+        <topic>/world/virtual_maize_field/stats</topic>
+
+    </plugin>
+
+    <!-- Entity tree -->
+    <plugin filename="EntityTree" name="Entity tree">
+    </plugin>
+  </gui>
+
+    <light type="directional" name="sun">
+      <!-- Disable shadows to avoid flickering on non-gpu pc, see: 
+           https://github.com/gazebosim/gz-sim/issues/2267 -->
+      <cast_shadows>false</cast_shadows>
+      <pose>0 0 10 0 0 0</pose>
+      <diffuse>0.8 0.8 0.8 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+      <attenuation>
+        <range>1000</range>
+        <constant>0.9</constant>
+        <linear>0.01</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <direction>-0.5 0.1 -0.9</direction>
+    </light>
+
+    <scene>
+      <sky>
+        <clouds>
+          <speed>12</speed>
+        </clouds>
+      </sky>
+      <grid>false</grid>
+    </scene>
+
+    <spherical_coordinates>
+      <surface_model>EARTH_WGS84</surface_model>
+      <latitude_deg>27.9162477</latitude_deg>
+      <longitude_deg>30.5634376</longitude_deg>
+      <elevation>0</elevation>
+      <heading_deg>0</heading_deg>
+    </spherical_coordinates>
+
+    <model name="heightmap">
+      <static>true</static>
+      <link name="link">
+        <visual name="ground_plane">
+          <geometry>
+            <heightmap>
+              <use_terrain_paging>false</use_terrain_paging>
+              <texture>
+                <diffuse>model://materials/textures/grass_color.jpg</diffuse>
+                <normal>model://materials/textures/grass_normal.jpg</normal>
+                <size>4</size>
+              </texture>
+              <texture>
+                <diffuse>model://materials/textures/dirt_diffusespecular.png</diffuse>
+                <normal>model://materials/textures/flat_normal.png</normal>
+                <size>1</size>
+              </texture>
+              <!-- <texture>
+                <diffuse>model://materials/textures/grass_color.jpg</diffuse>
+                <normal>model://materials/textures/grass_normal.jpg</normal>
+                <size>4</size>
+              </texture> -->
+              <!-- Without this unused 3. texture the blend between the first 2 doesn"t work -->
+              <texture>
+                <diffuse>model://materials/textures/fungus_diffusespecular.png</diffuse>
+                <normal>model://materials/textures/flat_normal.png</normal>
+                <size>1</size>
+              </texture>
+              <blend>
+                <min_height>0.0001</min_height>
+                <fade_dist>0.05</fade_dist>
+              </blend>
+              <!-- <blend>
+                <min_height>0.00010000000000000002</min_height>
+                <fade_dist>0.05</fade_dist>
+              </blend> -->
+              <!-- Without this unused 3. texture the blend between the first 2 doesn"t work -->
+              <blend>
+                <min_height>4</min_height>
+                <fade_dist>5</fade_dist>
+              </blend>
+              <uri>/home/ebrahim/.ros/virtual_maize_field/virtual_maize_field_heightmap.png</uri>
+              <size>134.0 134.0 0.00015000000000000001</size>
+              <pos>0 0 0</pos>
+            </heightmap>
+          </geometry>
+        </visual>
+        <collision name="collision">
+          <geometry>
+            <heightmap>
+              <uri>/home/ebrahim/.ros/virtual_maize_field/virtual_maize_field_heightmap.png</uri>
+              <size>134.0 134.0 0.00015000000000000001</size>
+              <pos>0 0 0</pos>
+            </heightmap>
+          </geometry>
+        </collision>
+      </link>
+    </model>
+     
+     
+    <include>
+      <uri>model://natroon_lemon_tree</uri>
+      <pose>-10.11899969493513 -56.53453274860121 9.491458095882562e-05 0.0 0.0 3.245744245853041</pose>
+      <name>natroon_lemon_tree_0000</name>
+      <static>true</static>
+    </include> 
+     
+     
+    <include>
+      <uri>model://natroon_lemon_tree</uri>
+      <pose>-10.105792588084118 -49.52502094545974 0.00011200390359055186 0.0 0.0 0.49433605888710963</pose>
+      <name>natroon_lemon_tree_0001</name>
+      <static>true</static>
+    </include> 
+     
+     
+    <include>
+      <uri>model://natroon_lemon_tree</uri>
+      <pose>-10.138293983349518 -42.4650630569745 0.00011185884647645361 0.0 0.0 0.004900391540958557</pose>
+      <name>natroon_lemon_tree_0002</name>
+      <static>true</static>
+    </include> 
+     
+     
+    <include>
+      <uri>model://natroon_lemon_tree</uri>
+      <pose>-10.129697654570572 -35.42384737779848 0.00010633326272851895 0.0 0.0 5.002658478193265</pose>
+      <name>natroon_lemon_tree_0003</name>
+      <static>true</static>
+    </include> 
+     
+     
+    <include>
+      <uri>model://natroon_lemon_tree</uri>
+      <pose>-10.105674916245961 -28.370096756013844 0.00010558464247888356 0.0 0.0 1.9113447239927797</pose>
+      <name>natroon_lemon_tree_0004</name>
+      <static>true</static>
+    </include> 
+     
+     
+    <include>
+      <uri>model://natroon_lemon_tree</uri>
+      <pose>-10.12058997648417 -21.311744512018965 0.00010589941047827904 0.0 0.0 2.2677759363971455</pose>
+      <name>natroon_lemon_tree_0005</name>
+      <static>true</static>
+    </include> 
+     
+     
+    <include>
+      <uri>model://natroon_lemon_tree</uri>
+      <pose>-10.137408621218155 -14.247280010302422 7.804549958427239e-05 0.0 0.0 3.3344694402960684</pose>
+      <name>natroon_lemon_tree_0006</name>
+      <static>true</static>
+    </include> 
+     
+     
+    <include>
+      <uri>model://natroon_lemon_tree</uri>
+      <pose>-10.128573139640508 -7.219606966391762 7.519193678713709e-05 0.0 0.0 1.5249696179809242</pose>
+      <name>natroon_lemon_tree_0007</name>
+      <static>true</static>
+    </include> 
+     
+     
+    <include>
+      <uri>model://natroon_lemon_tree</uri>
+      <pose>-10.131245725043843 -0.16695606187122874 9.472107958921886e-05 0.0 0.0 1.303772347701693</pose>
+      <name>natroon_lemon_tree_0008</name>
+      <static>true</static>
+    </include> 
+     
+     
+    <include>
+      <uri>model://natroon_lemon_tree</uri>
+      <pose>-10.119601007287663 6.849735447894293 9.712898096508105e-05 0.0 0.0 0.8176534767458564</pose>
+      <name>natroon_lemon_tree_0009</name>
+      <static>true</static>
+    </include> 
+     
+     
+    <include>
+      <uri>model://natroon_lemon_tree</uri>
+      <pose>-10.117747655213181 13.891330019533367 9.75692376842149e-05 0.0 0.0 4.886395644356662</pose>
+      <name>natroon_lemon_tree_0010</name>
+      <static>true</static>
+    </include> 
+     
+     
+    <include>
+      <uri>model://natroon_lemon_tree</uri>
+      <pose>-10.11764582817287 20.89438124951094 9.437512845465366e-05 0.0 0.0 3.3464015438692836</pose>
+      <name>natroon_lemon_tree_0011</name>
+      <static>true</static>
+    </include> 
+     
+     
+    <include>
+      <uri>model://natroon_lemon_tree</uri>
+      <pose>-10.119855203174424 27.958370026176365 8.730773517811752e-05 0.0 0.0 0.872316551986849</pose>
+      <name>natroon_lemon_tree_0012</name>
+      <static>true</static>
+    </include> 
+     
+     
+    <include>
+      <uri>model://natroon_lemon_tree</uri>
+      <pose>-10.127180537783117 34.99109687587257 9.222319227406717e-05 0.0 0.0 3.2782029915098687</pose>
+      <name>natroon_lemon_tree_0013</name>
+      <static>true</static>
+    </include> 
+     
+     
+    <include>
+      <uri>model://natroon_lemon_tree</uri>
+      <pose>-10.109061892854676 42.04448026852721 9.300988529800705e-05 0.0 0.0 6.0105252022765985</pose>
+      <name>natroon_lemon_tree_0014</name>
+      <static>true</static>
+    </include> 
+     
+     
+    <include>
+      <uri>model://natroon_lemon_tree</uri>
+      <pose>-10.13923019705152 49.079236897174155 0.00011539987160086357 0.0 0.0 2.206992259058026</pose>
+      <name>natroon_lemon_tree_0015</name>
+      <static>true</static>
+    </include> 
+     
+     
+    <include>
+      <uri>model://natroon_lemon_tree</uri>
+      <pose>-10.125254375968783 56.13394776920239 0.00012140760026377008 0.0 0.0 4.478993103967509</pose>
+      <name>natroon_lemon_tree_0016</name>
+      <static>true</static>
+    </include> 
+     
+     
+    <include>
+      <uri>model://natroon_lemon_tree</uri>
+      <pose>-0.10815967682509592 -56.48576832517993 0.00010667018380827006 0.0 0.0 1.0066838491096566</pose>
+      <name>natroon_lemon_tree_0017</name>
+      <static>true</static>
+    </include> 
+     
+     
+    <include>
+      <uri>model://natroon_lemon_tree</uri>
+      <pose>-0.1179817535107544 -49.47973802444031 9.785953988987379e-05 0.0 0.0 2.3568981829651907</pose>
+      <name>natroon_lemon_tree_0018</name>
+      <static>true</static>
+    </include> 
+     
+     
+    <include>
+      <uri>model://natroon_lemon_tree</uri>
+      <pose>-0.11980239890399585 -42.38256160942295 0.00010280379504567273 0.0 0.0 4.692034406856485</pose>
+      <name>natroon_lemon_tree_0019</name>
+      <static>true</static>
+    </include> 
+     
+     
+    <include>
+      <uri>model://natroon_lemon_tree</uri>
+      <pose>-0.10899304141968874 -35.375602486229376 0.00010103322986582138 0.0 0.0 2.711910914696882</pose>
+      <name>natroon_lemon_tree_0020</name>
+      <static>true</static>
+    </include> 
+     
+     
+    <include>
+      <uri>model://natroon_lemon_tree</uri>
+      <pose>-0.13638329646353659 -28.2641480282244 0.00010072285339173612 0.0 0.0 4.778069104860138</pose>
+      <name>natroon_lemon_tree_0021</name>
+      <static>true</static>
+    </include> 
+     
+     
+    <include>
+      <uri>model://natroon_lemon_tree</uri>
+      <pose>-0.13310070860904216 -21.274645317697665 0.0001143179533786622 0.0 0.0 5.318162558004912</pose>
+      <name>natroon_lemon_tree_0022</name>
+      <static>true</static>
+    </include> 
+     
+     
+    <include>
+      <uri>model://natroon_lemon_tree</uri>
+      <pose>-0.12124987020208328 -14.222890629141151 0.00010029712002083217 0.0 0.0 2.643190362187515</pose>
+      <name>natroon_lemon_tree_0023</name>
+      <static>true</static>
+    </include> 
+     
+     
+    <include>
+      <uri>model://natroon_lemon_tree</uri>
+      <pose>-0.12931046468290913 -7.166394326351725 8.833629240714066e-05 0.0 0.0 4.4071972478403545</pose>
+      <name>natroon_lemon_tree_0024</name>
+      <static>true</static>
+    </include> 
+     
+     
+    <include>
+      <uri>model://natroon_lemon_tree</uri>
+      <pose>-0.12023028223335591 -0.1336466243022903 0.00011022475726264257 0.0 0.0 3.530476101161081</pose>
+      <name>natroon_lemon_tree_0025</name>
+      <static>true</static>
+    </include> 
+     
+     
+    <include>
+      <uri>model://natroon_lemon_tree</uri>
+      <pose>-0.11499304379631231 6.95590942017753 0.0001180481997862962 0.0 0.0 5.086404887071061</pose>
+      <name>natroon_lemon_tree_0026</name>
+      <static>true</static>
+    </include> 
+     
+     
+    <include>
+      <uri>model://natroon_lemon_tree</uri>
+      <pose>-0.12746821533679747 14.001307281274162 0.00010871340805240105 0.0 0.0 1.4546797331829657</pose>
+      <name>natroon_lemon_tree_0027</name>
+      <static>true</static>
+    </include> 
+     
+     
+    <include>
+      <uri>model://natroon_lemon_tree</uri>
+      <pose>-0.13452555795312532 21.103483559065477 0.00010616237068909095 0.0 0.0 5.184477296708555</pose>
+      <name>natroon_lemon_tree_0028</name>
+      <static>true</static>
+    </include> 
+     
+     
+    <include>
+      <uri>model://natroon_lemon_tree</uri>
+      <pose>-0.11273951944253807 28.137047759973566 0.00010195734092761388 0.0 0.0 5.342143746410299</pose>
+      <name>natroon_lemon_tree_0029</name>
+      <static>true</static>
+    </include> 
+     
+     
+    <include>
+      <uri>model://natroon_lemon_tree</uri>
+      <pose>-0.13473212418061725 35.23156021911346 0.00010178745243582304 0.0 0.0 0.204176294133609</pose>
+      <name>natroon_lemon_tree_0030</name>
+      <static>true</static>
+    </include> 
+     
+     
+    <include>
+      <uri>model://natroon_lemon_tree</uri>
+      <pose>-0.11941112533631132 42.283288700867644 9.016852310517656e-05 0.0 0.0 3.2965142538639465</pose>
+      <name>natroon_lemon_tree_0031</name>
+      <static>true</static>
+    </include> 
+     
+     
+    <include>
+      <uri>model://natroon_lemon_tree</uri>
+      <pose>-0.12756841573564853 49.302067974566114 8.537591891254802e-05 0.0 0.0 2.040477437673735</pose>
+      <name>natroon_lemon_tree_0032</name>
+      <static>true</static>
+    </include> 
+     
+     
+    <include>
+      <uri>model://natroon_lemon_tree</uri>
+      <pose>-0.14129894803378013 56.31015647963832 9.902232597626512e-05 0.0 0.0 2.9252279757532813</pose>
+      <name>natroon_lemon_tree_0033</name>
+      <static>true</static>
+    </include> 
+     
+     
+    <include>
+      <uri>model://natroon_lemon_tree</uri>
+      <pose>9.87798724910977 -56.517173385936616 9.643840163571682e-05 0.0 0.0 3.1720443673956034</pose>
+      <name>natroon_lemon_tree_0034</name>
+      <static>true</static>
+    </include> 
+     
+     
+    <include>
+      <uri>model://natroon_lemon_tree</uri>
+      <pose>9.8796692558193 -49.44057263644424 9.101932369300476e-05 0.0 0.0 1.0273760108142893</pose>
+      <name>natroon_lemon_tree_0035</name>
+      <static>true</static>
+    </include> 
+     
+     
+    <include>
+      <uri>model://natroon_lemon_tree</uri>
+      <pose>9.882257416741412 -42.35598110587699 9.597192368720655e-05 0.0 0.0 3.4504042721413395</pose>
+      <name>natroon_lemon_tree_0036</name>
+      <static>true</static>
+    </include> 
+     
+     
+    <include>
+      <uri>model://natroon_lemon_tree</uri>
+      <pose>9.873181548831143 -35.23384989889995 0.00011154603025104541 0.0 0.0 4.326911730231696</pose>
+      <name>natroon_lemon_tree_0037</name>
+      <static>true</static>
+    </include> 
+     
+     
+    <include>
+      <uri>model://natroon_lemon_tree</uri>
+      <pose>9.895290991769405 -28.21657456171071 0.0001020876481754761 0.0 0.0 3.5186661888214674</pose>
+      <name>natroon_lemon_tree_0038</name>
+      <static>true</static>
+    </include> 
+     
+     
+    <include>
+      <uri>model://natroon_lemon_tree</uri>
+      <pose>9.893954701951932 -21.18860299167491 0.00011823520140885435 0.0 0.0 2.199429030754523</pose>
+      <name>natroon_lemon_tree_0039</name>
+      <static>true</static>
+    </include> 
+     
+     
+    <include>
+      <uri>model://natroon_lemon_tree</uri>
+      <pose>9.884128977438197 -14.09930305533452 0.00011474890823089359 0.0 0.0 1.9238428625560693</pose>
+      <name>natroon_lemon_tree_0040</name>
+      <static>true</static>
+    </include> 
+     
+     
+    <include>
+      <uri>model://natroon_lemon_tree</uri>
+      <pose>9.888651859883149 -7.085593622258319 0.00010337825968628762 0.0 0.0 4.411559239331952</pose>
+      <name>natroon_lemon_tree_0041</name>
+      <static>true</static>
+    </include> 
+     
+     
+    <include>
+      <uri>model://natroon_lemon_tree</uri>
+      <pose>9.880036328063538 -0.03784940263203734 0.00011048155762687758 0.0 0.0 5.451864874099083</pose>
+      <name>natroon_lemon_tree_0042</name>
+      <static>true</static>
+    </include> 
+     
+     
+    <include>
+      <uri>model://natroon_lemon_tree</uri>
+      <pose>9.888960030995262 6.971616452794063 0.00011712617657909983 0.0 0.0 2.4628776604630227</pose>
+      <name>natroon_lemon_tree_0043</name>
+      <static>true</static>
+    </include> 
+     
+     
+    <include>
+      <uri>model://natroon_lemon_tree</uri>
+      <pose>9.870010025000438 14.034573418182486 0.00012037022043862113 0.0 0.0 0.23811594781111528</pose>
+      <name>natroon_lemon_tree_0044</name>
+      <static>true</static>
+    </include> 
+     
+     
+    <include>
+      <uri>model://natroon_lemon_tree</uri>
+      <pose>9.881753108817234 21.032863203822654 0.00012862755238194357 0.0 0.0 1.9210498804483842</pose>
+      <name>natroon_lemon_tree_0045</name>
+      <static>true</static>
+    </include> 
+     
+     
+    <include>
+      <uri>model://natroon_lemon_tree</uri>
+      <pose>9.881158470784124 28.0605133208182 0.0001064699846964771 0.0 0.0 4.01892542322116</pose>
+      <name>natroon_lemon_tree_0046</name>
+      <static>true</static>
+    </include> 
+     
+     
+    <include>
+      <uri>model://natroon_lemon_tree</uri>
+      <pose>9.87957307825282 35.06024042878899 0.00010416900539285363 0.0 0.0 2.5955482167852635</pose>
+      <name>natroon_lemon_tree_0047</name>
+      <static>true</static>
+    </include> 
+     
+     
+    <include>
+      <uri>model://natroon_lemon_tree</uri>
+      <pose>9.86428573670407 42.096231793933555 9.486482065478992e-05 0.0 0.0 0.1456950962478391</pose>
+      <name>natroon_lemon_tree_0048</name>
+      <static>true</static>
+    </include> 
+     
+     
+    <include>
+      <uri>model://natroon_lemon_tree</uri>
+      <pose>9.884938493545244 49.16149481886994 7.265029767767779e-05 0.0 0.0 5.199911163989578</pose>
+      <name>natroon_lemon_tree_0049</name>
+      <static>true</static>
+    </include> 
+     
+     
+    <include>
+      <uri>model://natroon_lemon_tree</uri>
+      <pose>9.866476507742183 56.238252516984616 7.103021574895225e-05 0.0 0.0 4.992239174701836</pose>
+      <name>natroon_lemon_tree_0050</name>
+      <static>true</static>
+    </include> 
+   
+    <actor name="farmer1">
+      <skin>
+        <filename>https://fuel.gazebosim.org/1.0/Mingfei/models/actor/tip/files/meshes/walk.dae</filename>
+        <scale>1.0</scale>
+      </skin>
+      <animation name='walk'>
+        <filename>https://fuel.gazebosim.org/1.0/Mingfei/models/actor/tip/files/meshes/walk.dae</filename>
+        <interpolate_x>true</interpolate_x>
+        <scale>0.055</scale>
+      </animation>
+      <script>
+        <loop>true</loop>
+        <delay_start>1.000000</delay_start>
+        <auto_start>true</auto_start>
+        <trajectory id="0" type="walk">
+          <waypoint>
+            <time>0</time>
+            <pose>6.7 -10.6 1.0 0 0 -1.57</pose>
+          </waypoint>
+          <waypoint>
+            <time>2</time>
+            <pose>6.7 -14.6 1.0 0 0 -1.57</pose>
+          </waypoint>
+          <waypoint>
+            <time>4</time>
+            <pose>6.7 -18.6 1.0 0 0 -1.57</pose>
+          </waypoint>
+          <waypoint>
+            <time>6</time>
+            <pose>6.7 -22.6 1.0 0 0 -1.57</pose>
+          </waypoint>
+          <waypoint>
+            <time>8</time>
+            <pose>6.7 -26.6 1.0 0 0 -1.57</pose>
+          </waypoint>
+          <waypoint>
+            <time>10</time>
+            <pose>6.7 -30.6 1.0 0 0 -1.57</pose>
+          </waypoint>
+          <waypoint>
+            <time>12</time>
+            <pose>6.7 -26.6 1.0 0 0 1.57</pose>
+          </waypoint>
+          <waypoint>
+            <time>14</time>
+            <pose>6.7 -22.6 1.0 0 0 1.57</pose>
+          </waypoint>
+          <waypoint>
+            <time>16</time>
+            <pose>6.7 -18.6 1.0 0 0 1.57</pose>
+          </waypoint>
+          <waypoint>
+            <time>18</time>
+            <pose>6.7 -14.6 1.0 0 0 1.57</pose>
+          </waypoint>
+          <waypoint>
+            <time>20</time>
+            <pose>6.7 -10.6 1.0 0 0 1.57</pose>
+          </waypoint>
+        </trajectory>
+      </script>
+    </actor>
+
+    <actor name="farmer">
+      <skin>
+        <filename>https://fuel.gazebosim.org/1.0/Mingfei/models/actor/tip/files/meshes/run.dae</filename>
+        <scale>1.0</scale>
+      </skin>
+      <animation name='walk'>
+        <filename>https://fuel.gazebosim.org/1.0/Mingfei/models/actor/tip/files/meshes/run.dae</filename>
+        <scale>2.0</scale>
+        <interpolate_x>true</interpolate_x>
+      </animation>
+      <script>
+        <loop>true</loop>
+        <delay_start>0.000000</delay_start>
+        <auto_start>true</auto_start>
+        <trajectory id="1" type="walked">
+          <waypoint>
+            <time>0</time>
+            <pose>2.7 -10.6 1.0 0 0 -1.57</pose>
+          </waypoint>
+          <waypoint>
+            <time>2</time>
+            <pose>2.7 -14.6 1.0 0 0 -1.57</pose>
+          </waypoint>
+          <waypoint>
+            <time>4</time>
+            <pose>2.7 -18.6 1.0 0 0 -1.57</pose>
+          </waypoint>
+          <waypoint>
+            <time>6</time>
+            <pose>2.7 -22.6 1.0 0 0 -1.57</pose>
+          </waypoint>
+          <waypoint>
+            <time>8</time>
+            <pose>2.7 -26.6 1.0 0 0 -1.57</pose>
+          </waypoint>
+          <waypoint>
+            <time>10</time>
+            <pose>2.7 -30.6 1.0 0 0 -1.57</pose>
+          </waypoint>
+          <waypoint>
+            <time>12</time>
+            <pose>2.7 -26.6 1.0 0 0 1.57</pose>
+          </waypoint>
+          <waypoint>
+            <time>14</time>
+            <pose>2.7 -22.6 1.0 0 0 1.57</pose>
+          </waypoint>
+          <waypoint>
+            <time>16</time>
+            <pose>2.7 -18.6 1.0 0 0 1.57</pose>
+          </waypoint>
+          <waypoint>
+            <time>18</time>
+            <pose>2.7 -14.6 1.0 0 0 1.57</pose>
+          </waypoint>
+          <waypoint>
+            <time>20</time>
+            <pose>2.7 -10.6 1.0 0 0 1.57</pose>
+          </waypoint>
+        </trajectory>
+      </script>
+    </actor>
+
+    <actor name="farmer3">
+      <skin>
+        <filename>https://fuel.gazebosim.org/1.0/Mingfei/models/actor/tip/files/meshes/talk_b.dae</filename>
+        <scale>1.0</scale>
+      </skin>
+      <animation name='walk'>
+        <filename>https://fuel.gazebosim.org/1.0/Mingfei/models/actor/tip/files/meshes/talk_b.dae</filename>
+        <scale>2.0</scale>
+        <interpolate_x>true</interpolate_x>
+      </animation>
+      <pose>-5.7 -1.6 0.0 0 0 0</pose>
+    </actor>
+
+    <actor name="farmer4">
+      <skin>
+        <filename>https://fuel.gazebosim.org/1.0/Mingfei/models/actor/tip/files/meshes/talk_a.dae</filename>
+        <scale>1.0</scale>
+      </skin>
+      <animation name='walk'>
+        <filename>https://fuel.gazebosim.org/1.0/Mingfei/models/actor/tip/files/meshes/talk_a.dae</filename>
+        <scale>2.0</scale>
+        <interpolate_x>true</interpolate_x>
+      </animation>
+      <pose>-5.7 -2.6 0.0 0 0 0</pose>
+    </actor>
+
+    <actor name="farmer5">
+      <skin>
+        <filename>https://fuel.gazebosim.org/1.0/Mingfei/models/actor/tip/files/meshes/run.dae</filename>
+        <scale>1.0</scale>
+      </skin>
+      <animation name='walk'>
+        <filename>https://fuel.gazebosim.org/1.0/Mingfei/models/actor/tip/files/meshes/run.dae</filename>
+        <scale>2.0</scale>
+        <interpolate_x>true</interpolate_x>
+      </animation>
+      <script>
+        <loop>true</loop>
+        <delay_start>0.000000</delay_start>
+        <auto_start>true</auto_start>
+        <trajectory id="1" type="walked">
+          <waypoint>
+            <time>0</time>
+            <pose>-1.7 10.1 1.0 0 0 3.14</pose>
+          </waypoint>
+          <waypoint>
+            <time>5</time>
+            <pose>-10.7 10.1 1.0 0 0 3.14</pose>
+          </waypoint>
+          <waypoint>
+            <time>10</time>
+            <pose>-10.7 10.1 1.0 0 0 0</pose>
+          </waypoint>
+          <waypoint>
+            <time>15</time>
+            <pose>-1.7 10.1 1.0 0 0 0.0</pose>
+          </waypoint>
+        </trajectory>
+      </script>
+    </actor>
+    </world>
+</sdf>

@@ -1,0 +1,124 @@
+# gz topic published by the simulator core
+- ros_topic_name: "clock"
+  gz_topic_name: "clock"
+  ros_type_name: "rosgraph_msgs/msg/Clock"
+  gz_type_name: "gz.msgs.Clock"
+  direction: GZ_TO_ROS
+
+# gz topic published by the right camera sensor
+- ros_topic_name: "right_camera/rgb/image"
+  gz_topic_name: "right_camera/image"
+  ros_type_name: "sensor_msgs/msg/Image"
+  gz_type_name: "gz.msgs.Image"
+  direction: GZ_TO_ROS
+  
+- ros_topic_name: "right_camera/rgb/camera_info"
+  gz_topic_name: "right_camera/camera_info"
+  ros_type_name: "sensor_msgs/msg/CameraInfo"
+  gz_type_name: "gz.msgs.CameraInfo"
+  direction: GZ_TO_ROS
+
+- ros_topic_name: "right_camera/depth/image"
+  gz_topic_name: "right_camera/depth_image"
+  ros_type_name: "sensor_msgs/msg/Image"
+  gz_type_name: "gz.msgs.Image"
+  direction: GZ_TO_ROS
+
+- ros_topic_name: "right_camera/points"
+  gz_topic_name: "right_camera_point/points"
+  ros_type_name: "sensor_msgs/msg/PointCloud2"
+  gz_type_name: "gz.msgs.PointCloudPacked"
+  direction: GZ_TO_ROS
+
+# gz topic published by the left camera sensor
+- ros_topic_name: "left_camera/rgb/image"
+  gz_topic_name: "left_camera/image"
+  ros_type_name: "sensor_msgs/msg/Image"
+  gz_type_name: "gz.msgs.Image"
+  direction: GZ_TO_ROS
+  
+- ros_topic_name: "left_camera/rgb/camera_info"
+  gz_topic_name: "left_camera/camera_info"
+  ros_type_name: "sensor_msgs/msg/CameraInfo"
+  gz_type_name: "gz.msgs.CameraInfo"
+  direction: GZ_TO_ROS
+
+- ros_topic_name: "left_camera/depth/image"
+  gz_topic_name: "left_camera/depth_image"
+  ros_type_name: "sensor_msgs/msg/Image"
+  gz_type_name: "gz.msgs.Image"
+  direction: GZ_TO_ROS
+
+- ros_topic_name: "left_camera/points"
+  gz_topic_name: "left_camera_point/points"
+  ros_type_name: "sensor_msgs/msg/PointCloud2"
+  gz_type_name: "gz.msgs.PointCloudPacked"
+  direction: GZ_TO_ROS
+  
+# gz topic published by the odom
+- ros_topic_name: "/odom"
+  gz_topic_name: "/odom"
+  ros_type_name: "nav_msgs/msg/Odometry"
+  gz_type_name: "gz.msgs.OdometryWithCovariance"
+  direction: GZ_TO_ROS
+# gz topic published by the joint_state
+- ros_topic_name: "/joint_states"
+  gz_topic_name: "/joints_feedback"
+  ros_type_name: "sensor_msgs/msg/JointState"
+  gz_type_name: "gz.msgs.Model"
+  direction: GZ_TO_ROS
+# gz topic published by the tf
+- ros_topic_name: "/tf"
+  gz_topic_name: "/tf"
+  ros_type_name: "tf2_msgs/msg/TFMessage"
+  gz_type_name: "gz.msgs.Pose_V"
+  direction: GZ_TO_ROS
+# gz topic topic to control the steering and velocity of the robot
+- ros_topic_name: "/fwids/front_left_steer_rad/command"
+  gz_topic_name: "/fl_steering_pos_arm_joint"
+  ros_type_name: "std_msgs/msg/Float64"
+  gz_type_name: "gz.msgs.Double"
+  direction: ROS_TO_GZ
+
+- ros_topic_name: "/fwids/front_right_steer_rad/command"
+  gz_topic_name: "/fr_steering_pos_arm_joint"
+  ros_type_name: "std_msgs/msg/Float64"
+  gz_type_name: "gz.msgs.Double"
+  direction: ROS_TO_GZ
+
+- ros_topic_name: "/fwids/rear_right_steer_rad/command"
+  gz_topic_name: "/rr_steering_pos_arm_joint"
+  ros_type_name: "std_msgs/msg/Float64"
+  gz_type_name: "gz.msgs.Double"
+  direction: ROS_TO_GZ
+
+- ros_topic_name: "/fwids/rear_left_steer_rad/command"
+  gz_topic_name: "/rl_steering_pos_arm_joint"
+  ros_type_name: "std_msgs/msg/Float64"
+  gz_type_name: "gz.msgs.Double"
+  direction: ROS_TO_GZ
+
+# gz topic to control the velocity of the robot
+- ros_topic_name: "/fwids/front_right_rotor_radpersec/command"
+  gz_topic_name: "fr_motor_vel"
+  ros_type_name: "std_msgs/msg/Float64"
+  gz_type_name: "gz.msgs.Double"
+  direction: ROS_TO_GZ
+
+- ros_topic_name: "/fwids/front_left_rotor_radpersec/command"
+  gz_topic_name: "fl_motor_vel"
+  ros_type_name: "std_msgs/msg/Float64"
+  gz_type_name: "gz.msgs.Double"
+  direction: ROS_TO_GZ
+
+- ros_topic_name: "/fwids/rear_right_rotor_radpersec/command"
+  gz_topic_name: "rr_motor_vel"
+  ros_type_name: "std_msgs/msg/Float64"
+  gz_type_name: "gz.msgs.Double"
+  direction: ROS_TO_GZ
+
+- ros_topic_name: "/fwids/rear_left_rotor_radpersec/command"
+  gz_topic_name: "rl_motor_vel"
+  ros_type_name: "std_msgs/msg/Float64"
+  gz_type_name: "gz.msgs.Double"
+  direction: ROS_TO_GZ

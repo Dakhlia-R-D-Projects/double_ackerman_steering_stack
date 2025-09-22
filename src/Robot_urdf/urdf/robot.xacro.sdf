@@ -1,0 +1,957 @@
+<?xml version="1.0" ?>
+<sdf version="1.11" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <model name="Robot_urdf">
+    <link name="base_link">
+      <inertial>
+        <pose>-0.046572555713279701 -2.9348032436721101e-16 -0.116264725139818 0 0 0</pose>
+        <mass>464.13975839447698</mass>
+        <inertia>
+          <ixx>99.233817073851199</ixx>
+          <ixy>7.6295213813466699e-15</ixy>
+          <ixz>-12.243030847228001</ixz>
+          <iyy>370.00990728475801</iyy>
+          <iyz>-1.7209677316800801e-14</iyz>
+          <izz>443.67596439756301</izz>
+        </inertia>
+      </inertial>
+      <collision name="base_link_collision">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>package://Robot_urdf/meshes/visual/base_link.STL</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="base_link_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>package://Robot_urdf/meshes/visual/base_link.STL</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <diffuse>0.990196109 1 1 1</diffuse>
+          <ambient>0.990196109 1 1 1</ambient>
+        </material>
+      </visual>
+    </link>
+    <joint name="Left_camera_link_j" type="fixed">
+      <pose relative_to="base_link">1.1359999999999999 0.28766999999999998 0.11513 8.6789044596724832e-19 0.03490699999999998 0.26180000000000003</pose>
+      <parent>base_link</parent>
+      <child>Left_camera_link</child>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <lower>-inf</lower>
+          <upper>inf</upper>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+    </joint>
+    <link name="Left_camera_link">
+      <pose relative_to="Left_camera_link_j">0 0 0 0 0 0</pose>
+      <inertial>
+        <pose>-0.019250583111303701 8.8406917919670004e-07 -0.00085342380869873901 0 0 0</pose>
+        <mass>0.17032263428925101</mass>
+        <inertia>
+          <ixx>0.00038295573326242998</ixx>
+          <ixy>3.2459058119113701e-09</ixy>
+          <ixz>-3.3203253496914802e-07</ixz>
+          <iyy>3.25735374572707e-05</iyy>
+          <iyz>1.4987913441288701e-09</iyz>
+          <izz>0.00039060234100719702</izz>
+        </inertia>
+      </inertial>
+      <collision name="Left_camera_link_collision">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>package://Robot_urdf/meshes/visual/Left_camera_link.STL</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="Left_camera_link_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>package://Robot_urdf/meshes/visual/Left_camera_link.STL</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <diffuse>0.941176474 0.941176474 0.941176474 1</diffuse>
+          <ambient>0.941176474 0.941176474 0.941176474 1</ambient>
+        </material>
+      </visual>
+
+      <sensor name="left_rgbd_camera" type="rgbd_camera">
+        <camera name="Left_camera_link">
+          <horizontal_fov>1.91986</horizontal_fov>
+          <image>
+            <width>1920</width>
+            <height>1080</height>
+          </image>
+          <clip>
+            <near>0.1</near>
+            <far>300.7</far>
+          </clip>
+          <depth_camera>
+            <clip>
+              <near>0.1</near>
+              <far>20.0</far>
+            </clip>
+          </depth_camera>
+          <noise>
+            <type>gaussian</type>
+            <mean>0</mean>
+            <stddev>0.007</stddev>
+          </noise>
+          <optical_frame_id>left_camera_link_optical</optical_frame_id>
+        </camera>
+        <always_on>1</always_on>
+        <update_rate>30</update_rate>
+        <gz_frame_id>Left_camera_link</gz_frame_id>
+        <topic>left_camera</topic>
+      </sensor>
+      <!--used only to solve the problem of pointcloud orientation (this sensor used to pubish only the point cloud)-->
+      <sensor name="left_rgbd_camera1" type="rgbd_camera">
+        <camera name="left_camera_link_point">
+          <horizontal_fov>1.91986</horizontal_fov>
+          <image>
+            <width>1920</width>
+            <height>1080</height>
+          </image>
+          <clip>
+            <near>0.1</near>
+            <far>300.7</far>
+          </clip>
+          <depth_camera>
+            <clip>
+              <near>0.1</near>
+              <far>20.0</far>
+            </clip>
+          </depth_camera>
+          <noise>
+            <type>gaussian</type>
+            <mean>0</mean>
+            <stddev>0.007</stddev>
+          </noise>
+        </camera>
+        <always_on>1</always_on>
+        <update_rate>30</update_rate>
+        <gz_frame_id>Left_camera_link</gz_frame_id>
+        <topic>left_camera_point</topic>
+      </sensor>
+    </link>
+    <!-- this link was added to adjust the camera frame prespective-->
+    <joint name="left_camera_optical_joint" type="fixed">
+      <pose relative_to='Left_camera_link'>0 0 0 -1.5707 0 -1.5707</pose>
+      <parent>Left_camera_link</parent>
+      <child>left_camera_link_optical</child>
+    </joint>
+    <link name="left_camera_link_optical">
+    </link>
+
+    <joint name="right_camera_link_j" type="fixed">
+      <pose relative_to="base_link">1.1359999999999999 -0.28766999999999998 0.11513 -8.6789044596724832e-19 0.03490699999999998 -0.26180000000000003</pose>
+      <parent>base_link</parent>
+      <child>right_camera_link</child>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <lower>-inf</lower>
+          <upper>inf</upper>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+    </joint>
+    
+    <link name="right_camera_link">
+      <pose relative_to="right_camera_link_j">0 0 0 0 0 0</pose>
+      <inertial>
+        <pose>-0.019250583010916599 9.1452405043268602e-07 -0.00085342523084624999 0 0 0</pose>
+        <mass>0.170322633624158</mass>
+        <inertia>
+          <ixx>0.000382955707279669</ixx>
+          <ixy>3.2543702356762902e-09</ixy>
+          <ixz>-3.3203155690654302e-07</ixz>
+          <iyy>3.2573537465271902e-05</iyy>
+          <iyz>1.4995985159705101e-09</iyz>
+          <izz>0.00039060231512421197</izz>
+        </inertia>
+      </inertial>
+      <collision name="right_camera_link_collision">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>package://Robot_urdf/meshes/visual/right_camera_link.STL</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="right_camera_link_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>package://Robot_urdf/meshes/visual/right_camera_link.STL</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <diffuse>0.941176474 0.941176474 0.941176474 1</diffuse>
+          <ambient>0.941176474 0.941176474 0.941176474 1</ambient>
+        </material>
+      </visual>
+
+      <sensor name="right_rgbd_camera" type="rgbd_camera">
+        <camera name="right_camera_link">
+          <horizontal_fov>1.91986</horizontal_fov>
+          <image>
+            <width>1920</width>
+            <height>1080</height>
+          </image>
+          <clip>
+            <near>0.1</near>
+            <far>300.7</far>
+          </clip>
+          <depth_camera>
+            <clip>
+              <near>0.1</near>
+              <far>20.0</far>
+            </clip>
+          </depth_camera>
+          <noise>
+            <type>gaussian</type>
+            <mean>0</mean>
+            <stddev>0.007</stddev>
+          </noise>
+          <optical_frame_id>right_camera_link_optical</optical_frame_id>
+        </camera>
+        <always_on>1</always_on>
+        <update_rate>30</update_rate>
+        <gz_frame_id>right_camera_link</gz_frame_id>
+        <topic>right_camera</topic>
+      </sensor>
+
+      <!--used only to solve the problem of pointcloud orientation (this sensor used to pubish only the point cloud)-->
+      <sensor name="right_rgbd_camera1" type="rgbd_camera">
+        <camera name="right_camera_link_point">
+          <horizontal_fov>1.91986</horizontal_fov>
+          <image>
+            <width>1920</width>
+            <height>1080</height>
+          </image>
+          <clip>
+            <near>0.1</near>
+            <far>300.7</far>
+          </clip>
+          <depth_camera>
+            <clip>
+              <near>0.1</near>
+              <far>20.0</far>
+            </clip>
+          </depth_camera>
+          <noise>
+            <type>gaussian</type>
+            <mean>0</mean>
+            <stddev>0.007</stddev>
+          </noise>
+        </camera>
+        <always_on>1</always_on>
+        <update_rate>30</update_rate>
+        <gz_frame_id>right_camera_link</gz_frame_id>
+        <topic>right_camera_point</topic>
+      </sensor>
+    </link>
+
+    <!-- this link was added to adjust the camera frame prespective-->
+    <joint type="fixed" name="right_camera_optical_joint">
+      <pose relative_to='right_camera_link'>0 0 0 -1.5707 0 -1.5707</pose>
+      <parent>right_camera_link</parent>
+      <child>right_camera_link_optical</child>
+    </joint>
+
+    <link name="right_camera_link_optical">
+    </link>
+
+    <joint name="steer_back_left_link_j" type="revolute">
+      <pose relative_to="base_link">-1.1891 0.62 -0.45000000000000001 0 0 0</pose>
+      <parent>base_link</parent>
+      <child>steer_back_left_link</child>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <lower>-3.14159</lower>
+          <upper>3.14159</upper>
+          <effort>2000</effort>
+          <velocity>4</velocity>
+        </limit>
+        <dynamics>
+          <damping>0.1</damping>
+        </dynamics>
+      </axis>
+    </joint>
+    <link name="steer_back_left_link">
+      <pose relative_to="steer_back_left_link_j">0 0 0 0 0 0</pose>
+      <inertial>
+        <pose>0 0 -0.41351956926969102 0 0 0</pose>
+        <mass>31.822123739082102</mass>
+        <inertia>
+          <ixx>2.11863450177457</ixx>
+          <ixy>1.8279285175120599e-16</ixy>
+          <ixz>7.8711203730703606e-17</ixz>
+          <iyy>1.9296697142772701</iyy>
+          <iyz>3.81738289843737e-17</iyz>
+          <izz>0.393108548207387</izz>
+        </inertia>
+      </inertial>
+      <collision name="steer_back_left_link_collision">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>package://Robot_urdf/meshes/visual/steer_back_left_link.STL</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="steer_back_left_link_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>package://Robot_urdf/meshes/visual/steer_back_left_link.STL</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <diffuse>0.990196109 1 1 1</diffuse>
+          <ambient>0.990196109 1 1 1</ambient>
+        </material>
+      </visual>
+    </link>
+    <joint name="drive_back_left_link_j" type="revolute">
+      <pose relative_to="steer_back_left_link">0 -0.050000000000000003 -0.79000000000000004 0 0 0</pose>
+      <parent>steer_back_left_link</parent>
+      <child>drive_back_left_link</child>
+      <axis>
+        <xyz>0 1 0</xyz>
+        <limit>
+          <lower>-inf</lower>
+          <upper>inf</upper>
+        </limit>
+        <dynamics>
+          <damping>0.1</damping>
+        </dynamics>
+      </axis>
+    </joint>
+    <link name="drive_back_left_link">
+      <pose relative_to="drive_back_left_link_j">0 0 0 0 0 0</pose>
+      <inertial>
+        <pose>0 0.050000000000000197 0 0 0 0</pose>
+        <mass>50.265482457436804</mass>
+        <inertia>
+          <ixx>2.05250720034533</ixx>
+          <ixy>-1.65953769400635e-15</ixy>
+          <ixz>-3.7007434154171901e-16</ixz>
+          <iyy>4.02123859659494</iyy>
+          <iyz>-1.5862527624125499e-17</iyz>
+          <izz>2.0525072003453402</izz>
+        </inertia>
+      </inertial>
+      <collision name="drive_back_left_link_collision">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>package://Robot_urdf/meshes/visual/drive_back_left_link.STL</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="drive_back_left_link_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>package://Robot_urdf/meshes/visual/drive_back_left_link.STL</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <diffuse>0.990196109 1 1 1</diffuse>
+          <ambient>0.990196109 1 1 1</ambient>
+        </material>
+      </visual>
+    </link>
+    <joint name="steer_back_right_link_j" type="revolute">
+      <pose relative_to="base_link">-1.1891 -0.62 -0.45000000000000001 0 0 0</pose>
+      <parent>base_link</parent>
+      <child>steer_back_right_link</child>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <lower>-3.14159</lower>
+          <upper>3.14159</upper>
+          <effort>2000</effort>
+          <velocity>4</velocity>
+        </limit>
+        <dynamics>
+          <damping>0.1</damping>
+        </dynamics>
+      </axis>
+    </joint>
+    <link name="steer_back_right_link">
+      <pose relative_to="steer_back_right_link_j">0 0 0 0 0 0</pose>
+      <inertial>
+        <pose>-2.2204460492503101e-16 0 -0.41351956926969102 0 0 0</pose>
+        <mass>31.822123739081999</mass>
+        <inertia>
+          <ixx>2.11863450177457</ixx>
+          <ixy>-3.6550784670468497e-17</ixy>
+          <ixz>2.2902041138848798e-16</ixz>
+          <iyy>1.9296697142772701</iyy>
+          <iyz>-1.8275463594005099e-17</iyz>
+          <izz>0.393108548207387</izz>
+        </inertia>
+      </inertial>
+      <collision name="steer_back_right_link_collision">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>package://Robot_urdf/meshes/visual/steer_back_right_link.STL</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="steer_back_right_link_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>package://Robot_urdf/meshes/visual/steer_back_right_link.STL</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <diffuse>0.990196109 1 1 1</diffuse>
+          <ambient>0.990196109 1 1 1</ambient>
+        </material>
+      </visual>
+    </link>
+    <joint name="drive_back_right_link_j" type="revolute">
+      <pose relative_to="steer_back_right_link">0 -0.050000000000000003 -0.79000000000000004 0 0 0</pose>
+      <parent>steer_back_right_link</parent>
+      <child>drive_back_right_link</child>
+      <axis>
+        <xyz>0 1 0</xyz>
+        <limit>
+          <lower>-inf</lower>
+          <upper>inf</upper>
+        </limit>
+        <dynamics>
+          <damping>0.1</damping>
+        </dynamics>
+      </axis>
+    </joint>
+    <link name="drive_back_right_link">
+      <pose relative_to="drive_back_right_link_j">0 0 0 0 0 0</pose>
+      <inertial>
+        <pose>0 0.049999999999999899 0 0 0 0</pose>
+        <mass>50.265482457436697</mass>
+        <inertia>
+          <ixx>2.05250720034533</ixx>
+          <ixy>5.56928548429207e-17</ixy>
+          <ixz>7.2280144832366998e-18</ixz>
+          <iyy>4.0212385965949302</iyy>
+          <iyz>-7.46409543899459e-19</iyz>
+          <izz>2.05250720034533</izz>
+        </inertia>
+      </inertial>
+      <collision name="drive_back_right_link_collision">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>package://Robot_urdf/meshes/visual/drive_back_right_link.STL</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="drive_back_right_link_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>package://Robot_urdf/meshes/visual/drive_back_right_link.STL</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <diffuse>0.990196109 1 1 1</diffuse>
+          <ambient>0.990196109 1 1 1</ambient>
+        </material>
+      </visual>
+    </link>
+    <joint name="steer_front_left_link_j" type="revolute">
+      <pose relative_to="base_link">1.2009000000000001 0.62 -0.45000000000000001 0 0 0</pose>
+      <parent>base_link</parent>
+      <child>steer_front_left_link</child>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <lower>-3.14159</lower>
+          <upper>3.14159</upper>
+          <effort>2000</effort>
+          <velocity>4</velocity>
+        </limit>
+        <dynamics>
+          <damping>0.1</damping>
+        </dynamics>
+      </axis>
+    </joint>
+    <link name="steer_front_left_link">
+      <pose relative_to="steer_front_left_link_j">0 0 0 0 0 0</pose>
+      <inertial>
+        <pose>2.2204460492503101e-16 0 -0.41351956926969102 0 0 0</pose>
+        <mass>31.822123739082102</mass>
+        <inertia>
+          <ixx>2.11863450177457</ixx>
+          <ixy>1.6219769269805201e-16</ixy>
+          <ixz>-5.3019513558527198e-17</ixz>
+          <iyy>1.9296697142772701</iyy>
+          <iyz>3.1859777024644299e-17</iyz>
+          <izz>0.393108548207387</izz>
+        </inertia>
+      </inertial>
+      <collision name="steer_front_left_link_collision">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>package://Robot_urdf/meshes/visual/steer_front_left_link.STL</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="steer_front_left_link_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>package://Robot_urdf/meshes/visual/steer_front_left_link.STL</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <diffuse>0.990196109 1 1 1</diffuse>
+          <ambient>0.990196109 1 1 1</ambient>
+        </material>
+      </visual>
+    </link>
+    <joint name="drive_front_left_link_j" type="revolute">
+      <pose relative_to="steer_front_left_link">0 -0.050000000000000003 -0.79000000000000004 0 0 0</pose>
+      <parent>steer_front_left_link</parent>
+      <child>drive_front_left_link</child>
+      <axis>
+        <xyz>0 1 0</xyz>
+        <limit>
+          <lower>-inf</lower>
+          <upper>inf</upper>
+        </limit>
+        <dynamics>
+          <damping>0.1</damping>
+        </dynamics>
+      </axis>
+    </joint>
+    <link name="drive_front_left_link">
+      <pose relative_to="drive_front_left_link_j">0 0 0 0 0 0</pose>
+      <inertial>
+        <pose>0 0.050000000000000197 -2.2204460492503101e-16 0 0 0</pose>
+        <mass>50.265482457436697</mass>
+        <inertia>
+          <ixx>2.05250720034533</ixx>
+          <ixy>-9.6140966827479496e-16</ixy>
+          <ixz>-1.93710788150743e-16</ixz>
+          <iyy>4.0212385965949302</iyy>
+          <iyz>-1.7073729801098602e-17</iyz>
+          <izz>2.05250720034533</izz>
+        </inertia>
+      </inertial>
+      <collision name="drive_front_left_link_collision">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>package://Robot_urdf/meshes/visual/drive_front_left_link.STL</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="drive_front_left_link_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>package://Robot_urdf/meshes/visual/drive_front_left_link.STL</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <diffuse>0.990196109 1 1 1</diffuse>
+          <ambient>0.990196109 1 1 1</ambient>
+        </material>
+      </visual>
+    </link>
+    <joint name="steer_front_right_link_j" type="revolute">
+      <pose relative_to="base_link">1.2009000000000001 -0.62 -0.45000000000000001 0 0 0</pose>
+      <parent>base_link</parent>
+      <child>steer_front_right_link</child>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <lower>-3.14159</lower>
+          <upper>3.14159</upper>
+          <effort>2000</effort>
+          <velocity>4</velocity>
+        </limit>
+        <dynamics>
+          <damping>0.1</damping>
+        </dynamics>
+      </axis>
+    </joint>
+    <link name="steer_front_right_link">
+      <pose relative_to="steer_front_right_link_j">0 0 0 0 0 0</pose>
+      <inertial>
+        <pose>-2.2204460492503101e-16 -1.11022302462516e-16 -0.41351956926969102 0 0 0</pose>
+        <mass>31.822123739082102</mass>
+        <inertia>
+          <ixx>2.11863450177457</ixx>
+          <ixy>-1.57170518626472e-17</ixy>
+          <ixz>-2.9911799164017799e-19</ixz>
+          <iyy>1.9296697142772701</iyy>
+          <iyz>-2.8036359058475501e-18</iyz>
+          <izz>0.393108548207388</izz>
+        </inertia>
+      </inertial>
+      <collision name="steer_front_right_link_collision">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>package://Robot_urdf/meshes/visual/steer_front_right_link.STL</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="steer_front_right_link_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>package://Robot_urdf/meshes/visual/steer_front_right_link.STL</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <diffuse>0.990196109 1 1 1</diffuse>
+          <ambient>0.990196109 1 1 1</ambient>
+        </material>
+      </visual>
+    </link>
+    <joint name="drive_front_right_link_j" type="revolute">
+      <pose relative_to="steer_front_right_link">0 -0.050000000000000003 -0.79000000000000004 0 0 0</pose>
+      <parent>steer_front_right_link</parent>
+      <child>drive_front_right_link</child>
+      <axis>
+        <xyz>0 1 0</xyz>
+        <limit>
+          <lower>-inf</lower>
+          <upper>inf</upper>
+        </limit>
+        <dynamics>
+          <damping>0.1</damping>
+        </dynamics>
+      </axis>
+    </joint>
+    <link name="drive_front_right_link">
+      <pose relative_to="drive_front_right_link_j">0 0 0 0 0 0</pose>
+      <inertial>
+        <pose>0 0.049999999999999899 -2.2204460492503101e-16 0 0 0</pose>
+        <mass>50.265482457436697</mass>
+        <inertia>
+          <ixx>2.05250720034533</ixx>
+          <ixy>-2.15428176892479e-16</ixy>
+          <ixz>-1.47451495458029e-16</ixz>
+          <iyy>4.0212385965949302</iyy>
+          <iyz>-2.53528834134516e-17</iyz>
+          <izz>2.05250720034533</izz>
+        </inertia>
+      </inertial>
+      <collision name="drive_front_right_link_collision">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>package://Robot_urdf/meshes/visual/drive_front_right_link.STL</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="drive_front_right_link_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>package://Robot_urdf/meshes/visual/drive_front_right_link.STL</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <diffuse>0.990196109 1 1 1</diffuse>
+          <ambient>0.990196109 1 1 1</ambient>
+        </material>
+      </visual>
+    </link>
+    <joint name="tow_link_j" type="revolute">
+      <pose relative_to="base_link">-1.2641 0 -1.1599999999999999 0 0 0</pose>
+      <parent>base_link</parent>
+      <child>tow_link</child>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <lower>-inf</lower>
+          <upper>inf</upper>
+          <effort>0.00001</effort> 
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+    </joint>
+    <link name="tow_link">
+      <pose relative_to="tow_link_j">0 0 0 0 0 0</pose>
+      <inertial>
+        <pose>-1.94380750072301 0.000298673408522626 0.70478686049934902 0 0 0</pose>
+        <mass>359.93936151353</mass>
+        <inertia>
+          <ixx>110.928132962926</ixx>
+          <ixy>0.107499206749833</ixy>
+          <ixz>-2.1351059313407599</ixz>
+          <iyy>260.06698674828903</iyy>
+          <iyz>-0.00176075130579262</iyz>
+          <izz>266.97597303489903</izz>
+        </inertia>
+      </inertial>
+      <collision name="tow_link_collision">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>package://Robot_urdf/meshes/visual/tow_link.STL</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="tow_link_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>package://Robot_urdf/meshes/visual/tow_link.STL</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <diffuse>0.990196109 1 1 1</diffuse>
+          <ambient>0.990196109 1 1 1</ambient>
+        </material>
+      </visual>
+    </link>
+    <joint name="left_wheel_link_j" type="revolute">
+      <pose relative_to="tow_link">-1.9850000000000001 0.74861 0.059999999999999998 0 0 0</pose>
+      <parent>tow_link</parent>
+      <child>left_wheel_link</child>
+      <axis>
+        <xyz>0 1 0</xyz>
+        <limit>
+          <lower>-inf</lower>
+          <upper>inf</upper>
+          <effort>0.00001</effort> 
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+    </joint>
+    <link name="left_wheel_link">
+      <pose relative_to="left_wheel_link_j">0 0 0 0 0 0</pose>
+      <inertial>
+        <pose>4.5052834662939702e-07 0.00235156398011982 6.7494982491922397e-07 0 0 0</pose>
+        <mass>28.084722602686099</mass>
+        <inertia>
+          <ixx>2.90555283785165</ixx>
+          <ixy>1.6183138302995401e-06</ixy>
+          <ixz>8.4099082083157504e-07</ixz>
+          <iyy>5.1068606114181598</iyy>
+          <iyz>2.4212436093287101e-06</iyz>
+          <izz>2.90554839061851</izz>
+        </inertia>
+      </inertial>
+      <collision name="left_wheel_link_collision">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>package://Robot_urdf/meshes/visual/left_wheel_link.STL</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="left_wheel_link_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>package://Robot_urdf/meshes/visual/left_wheel_link.STL</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <diffuse>0.990196109 1 1 1</diffuse>
+          <ambient>0.990196109 1 1 1</ambient>
+        </material>
+      </visual>
+    </link>
+    <joint name="right_wheel_link_j" type="revolute">
+      <pose relative_to="tow_link">-1.9850000000000001 -0.74861 0.059999999999999998 0 0 0</pose>
+      <parent>tow_link</parent>
+      <child>right_wheel_link</child>
+      <axis>
+        <xyz>0 1 0</xyz>
+        <limit>
+          <lower>-inf</lower>
+          <upper>inf</upper>
+          <effort>0.00001</effort> 
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+    </joint>
+    <link name="right_wheel_link">
+      <pose relative_to="right_wheel_link_j">0 0 0 0 0 0</pose>
+      <inertial>
+        <pose>-2.5636361833392098e-07 0.0023515639801201501 7.6994204567526502e-07 0 0 0</pose>
+        <mass>28.084722602686</mass>
+        <inertia>
+          <ixx>2.9055492508173</ixx>
+          <ixy>-9.1834070336888403e-07</ixy>
+          <ixz>1.9475184634154901e-06</ixz>
+          <iyy>5.1068606114181501</iyy>
+          <iyz>2.7636951050321202e-06</iyz>
+          <izz>2.90555197765286</izz>
+        </inertia>
+      </inertial>
+      <collision name="right_wheel_link_collision">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>package://Robot_urdf/meshes/visual/right_wheel_link.STL</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="right_wheel_link_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>package://Robot_urdf/meshes/visual/right_wheel_link.STL</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <diffuse>0.990196109 1 1 1</diffuse>
+          <ambient>0.990196109 1 1 1</ambient>
+        </material>
+      </visual>
+    </link>
+
+    <plugin
+      filename="gz-sim-joint-position-controller-system"
+      name="gz::sim::systems::JointPositionController">
+      <joint_name>steer_back_left_link_j</joint_name>
+      <topic>rl_steering_pos_arm_joint</topic>
+      <use_velocity_commands>true</use_velocity_commands>
+      <cmd_max>10.0</cmd_max> <cmd_min>-10.0</cmd_min>
+    </plugin>
+
+    <plugin
+      filename="gz-sim-joint-position-controller-system"
+      name="gz::sim::systems::JointPositionController">
+      <joint_name>steer_back_right_link_j</joint_name>
+      <topic>rr_steering_pos_arm_joint</topic>
+      <use_velocity_commands>true</use_velocity_commands>
+      <cmd_max>10.0</cmd_max> <cmd_min>-10.0</cmd_min>
+    </plugin>
+
+    <plugin
+      filename="gz-sim-joint-position-controller-system"
+      name="gz::sim::systems::JointPositionController">
+      <joint_name>steer_front_left_link_j</joint_name>
+      <topic>fl_steering_pos_arm_joint</topic>
+      <use_velocity_commands>true</use_velocity_commands>
+      <cmd_max>10.0</cmd_max> <cmd_min>-10.0</cmd_min>
+    </plugin>
+
+    <plugin
+      filename="gz-sim-joint-position-controller-system"
+      name="gz::sim::systems::JointPositionController">
+      <joint_name>steer_front_right_link_j</joint_name>
+      <topic>fr_steering_pos_arm_joint</topic>
+      <use_velocity_commands>true</use_velocity_commands>
+      <cmd_max>10.0</cmd_max> <cmd_min>-10.0</cmd_min>
+    </plugin>
+
+    <plugin
+      filename="gz-sim-joint-controller-system"
+      name="gz::sim::systems::JointController">
+      <joint_name>drive_back_left_link_j</joint_name>
+      <topic>rl_motor_vel</topic>
+      <initial_velocity>0.0</initial_velocity>
+    </plugin>
+
+    <plugin
+      filename="gz-sim-joint-controller-system"
+      name="gz::sim::systems::JointController">
+      <joint_name>drive_back_right_link_j</joint_name>
+      <topic>rr_motor_vel</topic>
+      <initial_velocity>0.0</initial_velocity>
+    </plugin>
+
+    <plugin
+      filename="gz-sim-joint-controller-system"
+      name="gz::sim::systems::JointController">
+      <joint_name>drive_front_left_link_j</joint_name>
+      <topic>fl_motor_vel</topic>
+      <initial_velocity>0.0</initial_velocity>
+    </plugin>
+
+    <plugin
+      filename="gz-sim-joint-controller-system"
+      name="gz::sim::systems::JointController">
+      <joint_name>drive_front_right_link_j</joint_name>
+      <topic>fr_motor_vel</topic>
+      <initial_velocity>0.0</initial_velocity>
+    </plugin>
+
+    <plugin
+      filename="gz-sim-joint-state-publisher-system"
+      name="gz::sim::systems::JointStatePublisher">
+      <topic>joints_feedback</topic>
+    </plugin>
+
+    <plugin filename="ignition-gazebo-odometry-publisher-system"
+      name="ignition::gazebo::systems::OdometryPublisher">
+      <odom_frame>odom</odom_frame>
+      <odom_covariance_topic>odom</odom_covariance_topic>
+      <tf_topic>tf</tf_topic>
+      <robot_base_frame>base_link</robot_base_frame>
+      <odom_publish_frequency>100</odom_publish_frequency>
+    </plugin>
+
+  </model>
+</sdf>
