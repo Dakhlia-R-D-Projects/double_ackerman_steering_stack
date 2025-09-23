@@ -28,6 +28,7 @@ def generate_launch_description():
     localization = LaunchConfiguration('localization')
 
     parameters={
+      'rgbd_cameras': 2,
       'frame_id':'base_link',
       'odom_frame_id':'odom',
       'use_sim_time': use_sim_time,
@@ -37,11 +38,11 @@ def generate_launch_description():
       'subscribe_rgbd':True,
       'subscribe_rgb':False,
       'subscribe_depth':False,
-      'subscribe_scan':True,
+      'subscribe_scan':False,
       'odom_sensor_sync': True,
       'approx_sync':False,
       'sync_queue_size': 10,
-      "Grid/Sensor": "2",                     # 0=Laser, 1=RGBD, 2=laser+RGBD
+      "Grid/Sensor": "1",                     # 0=Laser, 1=RGBD, 2=laser+RGBD
       "Vis/EstimationType":"0",                #[Motion estimation approach: 0:3D->3D, 1:3D->2D (PnP), 2:2D->2D (Epipolar Geometry)]
       # RTAB-Map's internal parameters should be strings
       'RGBD/NeighborLinkRefining': 'true',    # Do odometry correction with consecutive laser scans
@@ -68,11 +69,21 @@ def generate_launch_description():
       "GTSAM/Optimizer":'1', # 0=Levenberg 1=GaussNewton 2=Dogleg
       "GTSAM/Incremental":"true",
     }
-    remappings1=[
-      ('/rgb/image',       '/rgb/image'),
-      ('/depth/image',     '/depth/image'),
-      ('/rgb/camera_info', '/rgb/camera_info'),
-      ('rgbd_image', 'rgbd_image')]
+    remappings_right_camera=[
+      ('/rgb/image',       'right_camera/rgb/image'),
+      ('/depth/image',     'right_camera/depth/image'),
+      ('/rgb/camera_info', 'right_camera/rgb/camera_info'),
+      ('rgbd_image', 'right_camera/rgbd_image')]
+    remappings_left_camera=[
+      ('/rgb/image',       'left_camera/rgb/image'),
+      ('/depth/image',     'left_camera/depth/image'),
+      ('/rgb/camera_info', 'left_camera/rgb/camera_info'),
+      ('rgbd_image', 'left_camera/rgbd_image')]
+    remappings_slam=[
+        ('rgbd_image1', 'left_camera/rgbd_image'),
+        ('rgbd_image2', 'right_camera/rgbd_image'),
+        ('odom', 'odom'),
+    ]
     return LaunchDescription([
 
         # Launch arguments
@@ -86,15 +97,19 @@ def generate_launch_description():
 
         # Nodes to launch
         Node(
-            package='rtabmap_sync', executable='rgbd_sync',name="front_rgbd", output='screen',
+            package='rtabmap_sync', executable='rgbd_sync',name="left_rgbd", output='screen',
             parameters=[{'approx_sync':False, 'use_sim_time':use_sim_time}],
-            remappings=remappings1),
+            remappings=remappings_left_camera),
+        Node(
+            package='rtabmap_sync', executable='rgbd_sync',name="right_rgbd", output='screen',
+            parameters=[{'approx_sync':False, 'use_sim_time':use_sim_time}],
+            remappings=remappings_right_camera),
         # SLAM Mode:
         Node(
             condition=UnlessCondition(localization),
             package='rtabmap_slam', executable='rtabmap', output='screen',
             parameters=[parameters],
-            remappings=[('scan', 'scan')],
+            remappings=remappings_slam,
             arguments=['-d']),
             
         # Localization mode:
@@ -104,21 +119,22 @@ def generate_launch_description():
             parameters=[parameters,
               {'Mem/IncrementalMemory':'False',
                'Mem/InitWMWithAllNodes':'True'}],
-            remappings=remappings1),
+            remappings=remappings_slam),
 
         Node(
             package='rtabmap_viz', executable='rtabmap_viz', output='screen',
             parameters=[parameters]),
-        
-        # Obstacle detection with the camera for nav2 local costmap.
-        # First, we need to convert depth image to a point cloud.
-        # Second, we segment the floor from the obstacles.
+
         Node(
-            package='rtabmap_util', executable='point_cloud_xyz',name="front_cloud", output='screen',
-            parameters=[{'decimation': 1,
-                         'max_depth': 20.0,
-                         'voxel_size': 0.001}],
-            remappings=[('depth/image', '/depth/image'),
-                        ('depth/camera_info', '/rgb/camera_info'),
-                        ('cloud', '/camera/points')]),
+            package='rtabmap_util', executable='obstacles_detection',name="right_obstacles_detection", output='screen',
+            parameters=[parameters],
+            remappings=[('cloud', 'right_camera/points'),
+                        ('obstacles', 'right_camera/points/obstacles'),
+                        ('ground', 'right_camera/points/ground')]),
+        Node(
+            package='rtabmap_util', executable='obstacles_detection',name="left_obstacles_detection", output='screen',
+            parameters=[parameters],
+            remappings=[('cloud', 'left_camera/points'),
+                        ('obstacles', 'left_camera/points/obstacles'),
+                        ('ground', 'left_camera/points/ground')]),
 ])
