@@ -28,7 +28,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'vel_driver = Robot_urdf.vel_driver:main',
+            'steering_commander = Robot_urdf.rear_steering_commander:main',
         ],
     },
 )

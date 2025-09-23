@@ -42,7 +42,7 @@ def generate_launch_description():
     ld=LaunchDescription()
     Pkg_directory = get_package_share_directory('virtual_maize_field') #this is the package name that contains the models
     bringup_dir = get_package_share_directory('Robot_urdf')
-    world = os.path.join(bringup_dir , "world", "generated_empty.world")
+    world = os.path.join(bringup_dir , "world", "generated.world")
     sdf_file  =  os.path.join(bringup_dir, 'urdf', 'robot.xacro.sdf')
     params_file = os.path.join(bringup_dir, 'config', 'double_ackerman_params.yaml')
     with open(sdf_file, 'r') as infp:
@@ -148,10 +148,9 @@ def generate_launch_description():
         # Create a node action for the controller
     controller_node = Node(
         package='Robot_urdf',
-        executable='vel_driver',
-        name='double_ackerman_controller',
+        executable='steering_commander',
+        name='steering_commander',
         output='screen',
-        parameters=[params_file]
     )
     
     ld.add_action(DeclareLaunchArgument('use_sim_time',default_value='True',description='Use sim time if true'))
