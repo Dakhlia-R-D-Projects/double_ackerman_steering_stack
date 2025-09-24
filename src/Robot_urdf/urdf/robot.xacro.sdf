@@ -103,7 +103,7 @@
           </clip>
           <depth_camera>
             <clip>
-              <near>0.1</near>
+              <near>0.4</near>
               <far>20.0</far>
             </clip>
           </depth_camera>
@@ -133,7 +133,7 @@
           </clip>
           <depth_camera>
             <clip>
-              <near>0.1</near>
+              <near>0.4</near>
               <far>20.0</far>
             </clip>
           </depth_camera>
@@ -225,7 +225,7 @@
           </clip>
           <depth_camera>
             <clip>
-              <near>0.1</near>
+              <near>0.4</near>
               <far>20.0</far>
             </clip>
           </depth_camera>
@@ -256,7 +256,7 @@
           </clip>
           <depth_camera>
             <clip>
-              <near>0.1</near>
+              <near>0.4</near>
               <far>20.0</far>
             </clip>
           </depth_camera>
