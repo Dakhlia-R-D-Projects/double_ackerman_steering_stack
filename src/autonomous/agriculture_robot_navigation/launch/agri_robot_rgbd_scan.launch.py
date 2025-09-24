@@ -40,7 +40,7 @@ def generate_launch_description():
       'subscribe_depth':False,
       'subscribe_scan':False,
       'odom_sensor_sync': True,
-      'approx_sync':False,
+      'approx_sync':True,
       'sync_queue_size': 10,
       "Grid/Sensor": "1",                     # 0=Laser, 1=RGBD, 2=laser+RGBD
       "Vis/EstimationType":"0",                #[Motion estimation approach: 0:3D->3D, 1:3D->2D (PnP), 2:2D->2D (Epipolar Geometry)]
@@ -80,8 +80,8 @@ def generate_launch_description():
       ('/rgb/camera_info', 'left_camera/rgb/camera_info'),
       ('rgbd_image', 'left_camera/rgbd_image')]
     remappings_slam=[
-        ('rgbd_image1', 'left_camera/rgbd_image'),
-        ('rgbd_image2', 'right_camera/rgbd_image'),
+        ('rgbd_image0', 'left_camera/rgbd_image'),
+        ('rgbd_image1', 'right_camera/rgbd_image'),
         ('odom', 'odom'),
     ]
     return LaunchDescription([
