@@ -1,30 +1,4 @@
-# Requirements:
-#   Install Turtlebot3 packages
-#   Modify turtlebot3_waffle SDF:
-#     1) Edit /opt/ros/$ROS_DISTRO/share/turtlebot3_gazebo/models/turtlebot3_waffle/model.sdf
-#     2) Add
-#          <joint name="camera_rgb_optical_joint" type="fixed">
-#            <parent>camera_rgb_frame</parent>
-#            <child>camera_rgb_optical_frame</child>
-#            <pose>0 0 0 -1.57079632679 0 -1.57079632679</pose>
-#            <axis>
-#              <xyz>0 0 1</xyz>
-#            </axis>
-#          </joint> 
-#     3) Rename <link name="camera_rgb_frame"> to <link name="camera_rgb_optical_frame">
-#     4) Add <link name="camera_rgb_frame"/>
-#     5) Change <sensor name="camera" type="camera"> to <sensor name="camera" type="depth">
-#     6) Change image width/height from 1920x1080 to 640x480
-#     7) Note that we can increase min scan range from 0.12 to 0.2 to avoid having scans 
-#        hitting the robot itself
-# Example:
-#   $ ros2 launch rtabmap_demos turtlebot3_sim_rgbd_scan_demo.launch.py
-#
-#   Teleop:
-#     $ ros2 run turtlebot3_teleop teleop_keyboard
-
 from ament_index_python.packages import get_package_share_directory
-
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, OpaqueFunction, GroupAction
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
@@ -76,7 +50,6 @@ def launch_setup(context, *args, **kwargs):
         PushRosNamespace(namespace),
         SetRemap(namespace_str + '/global_costmap/scan', namespace_str + '/scan'),
         SetRemap(namespace_str + '/local_costmap/scan', namespace_str + '/scan'),
-
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(nav2_launch),
             condition=IfCondition(LaunchConfiguration('localization')),
@@ -92,6 +65,7 @@ def launch_setup(context, *args, **kwargs):
     rviz = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([rviz_launch])
     )
+
     rtabmap = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([rtabmap_launch]),
         launch_arguments=[
@@ -101,7 +75,7 @@ def launch_setup(context, *args, **kwargs):
     )
     return [
         # Nodes to launch
-        # rviz,
+        rviz,
         rtabmap,
         nav2,
     ]

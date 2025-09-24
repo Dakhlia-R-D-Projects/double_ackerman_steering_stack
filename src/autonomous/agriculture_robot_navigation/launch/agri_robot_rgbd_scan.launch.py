@@ -40,8 +40,9 @@ def generate_launch_description():
       'subscribe_depth':False,
       'subscribe_scan':False,
       'odom_sensor_sync': True,
-      'approx_sync':True,
-      'sync_queue_size': 10,
+      'approx_sync':False,
+      'sync_queue_size': 20,
+      "Rtabmap/DetectionRate": "1", # 1Hz
       "Grid/Sensor": "1",                     # 0=Laser, 1=RGBD, 2=laser+RGBD
       "Vis/EstimationType":"0",                #[Motion estimation approach: 0:3D->3D, 1:3D->2D (PnP), 2:2D->2D (Epipolar Geometry)]
       # RTAB-Map's internal parameters should be strings

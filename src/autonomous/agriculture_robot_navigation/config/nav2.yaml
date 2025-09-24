@@ -25,11 +25,7 @@ bt_navigator:
 
 controller_server:
   ros__parameters:
-    odom_topic: /odom
-    use_sim_time: True
-    controller_frequency: 20.0
-    controller_plugin_types: ["teb_local_planner::TebLocalPlannerROS"]
-    controller_plugins: ["FollowPath"]
+    controller_frequency: 30.0
     FollowPath:
       plugin: "nav2_rotation_shim_controller::RotationShimController"
       angular_dist_threshold: 0.785 # the angle in radians that the robot must turn to be considered aligned with the path (will make robot turn to face the path)
@@ -127,13 +123,13 @@ local_costmap:
       width: 5
       height: 5
       resolution: 0.06
-      footprint: "[ [1.0, 1.0], [1.0, -1.0], [-1.0, -1.0], [-1.0, 1.0] ]"
+      footprint: "[ [3.0, 1.0], [3.0, -1.0], [-7.0, -1.0], [-7.0, 1.0] ]"
       always_send_full_costmap: true
       plugins: ["static_layer", "voxel_layer", "inflation_layer","obstacle_layer"]
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
         cost_scaling_factor: 5.0
-        inflation_radius: 3.0
+        inflation_radius: 8.0
       voxel_layer:
         plugin: "nav2_costmap_2d::VoxelLayer"
         enabled: true
@@ -181,7 +177,7 @@ global_costmap:
       publish_frequency: 20.0
       global_frame: map
       robot_base_frame: base_link
-      footprint: "[ [1.0, 1.0], [1.0, -1.0], [-1.0, -1.0], [-1.0, 1.0] ]"
+      footprint: "[ [3.0, 1.0], [3.0, -1.0], [-7.0, -1.0], [-7.0, 1.0] ]"
       resolution: 0.06
       track_unknown_space: true
       always_send_full_costmap: false
@@ -192,7 +188,7 @@ global_costmap:
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
         cost_scaling_factor: 5.0
-        inflation_radius: 3.0
+        inflation_radius: 8.0
 
 planner_server:
   ros__parameters:
@@ -329,17 +325,27 @@ collision_monitor:
       type: "polygon"
       action_type: "approach"
       footprint_topic: "local_costmap/published_footprint"
-      time_before_collision: 2.0
+      time_before_collision: 0.10
       simulation_time_step: 0.2
       min_points: 4
       visualize: False
       enabled: True
-    observation_sources: ["scan"]
-    scan:
-      type: "scan"
-      topic: "scan"
-      min_height: 0.15
-      max_height: 2.0
+    observation_sources: ["pointcloud1", "pointcloud2"]
+    pointcloud1:
+      type: "pointcloud"
+      topic: "right_camera/points"
+      transport_type: "raw"  # raw or/ with compression (zlib, draco, zstd)
+      min_height: 0.1
+      max_height: 0.5
+      min_range: 0.2
+      enabled: True
+    pointcloud2:
+      type: "pointcloud"
+      topic: "left_camera/points"
+      transport_type: "raw"  # raw or/ with compression (zlib, draco, zstd)
+      min_height: 0.1
+      max_height: 10.5
+      min_range: 0.2
       enabled: True
 
 collision_detector:
@@ -352,7 +358,7 @@ collision_detector:
     polygons: ["PolygonFront"]
     PolygonFront:
       type: "polygon"
-      points: "[ [1.0, 1.0], [1.0, -1.0], [-1.0, -1.0], [-1.0, 1.0] ]"
+      points: "[ [3.0, 1.0], [3.0, -1.0], [-7.0, -1.0], [-7.0, 1.0] ]"
       action_type: "none"
       min_points: 4
       visualize: True
