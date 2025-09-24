@@ -60,7 +60,7 @@ def launch_setup(context, *args, **kwargs):
     use_sim_time = LaunchConfiguration('use_sim_time')
 
     nav2_params_file = PathJoinSubstitution(
-        [FindPackageShare('agriculture_robot_navigation'),'nav2.yaml']
+        [FindPackageShare('agriculture_robot_navigation'),'config/nav2.yaml']
     )
 
     nav2_launch = PathJoinSubstitution(
