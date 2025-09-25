@@ -116,7 +116,7 @@ def generate_launch_description():
                 )
             ]
         ),
-        launch_arguments={"gz_args": ["-r -v 4 ", world]}.items(),
+        launch_arguments={"gz_args": ["-s --headless-rendering -r -v 4 ", world]}.items(),
     )
 
     # Spawn the robot in Gazebo

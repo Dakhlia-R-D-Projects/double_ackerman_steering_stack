@@ -122,9 +122,9 @@ def generate_launch_description():
                'Mem/InitWMWithAllNodes':'True'}],
             remappings=remappings_slam),
 
-        Node(
-            package='rtabmap_viz', executable='rtabmap_viz', output='screen',
-            parameters=[parameters]),
+        # Node(
+        #     package='rtabmap_viz', executable='rtabmap_viz', output='screen',
+        #     parameters=[parameters]),
 
         Node(
             package='rtabmap_util', executable='obstacles_detection',name="right_obstacles_detection", output='screen',
