@@ -52,10 +52,12 @@ def generate_launch_description():
       'RGBD/ProximityPathMaxNeighbors': '10', # Do also proximity detection by space by merging close scans together.
       'Reg/Strategy':              '2',       # 0=Visual, 1=ICP, 2=Visual+ICP
       'Vis/MinInliers':            '12',      # 3D visual words minimum inliers to accept loop closure
-      'RGBD/OptimizeFromGraphEnd': 'true',   # Optimize graph from initial node so /map -> /odom transform will be generated
+      'RGBD/OptimizeFromGraphEnd': 'true',    # Optimize graph from initial node so /map -> /odom transform will be generated
       'RGBD/OptimizeMaxError':     '4',       # Reject any loop closure causing large errors (>3x link's covariance) in the map
       'Reg/Force3DoF':             'true',    # 2D SLAM
-      'Grid/FromDepth':            'true',   # Create 2D occupancy grid from laser scan
+      'RGBD/CreateOccupancyGrid':  'true',    # Create 2D occupancy grid from RGBD
+      'Grid/RayTracing':            'true',    # Enable ray tracing for occupancy grid
+      'Grid/CellSize':              "0.05"  , # Occupancy grid cell size in meters
       'Mem/STMSize':               '30',      # increased to 30 to avoid adding too many loop closures on just seen locations
       'RGBD/LocalRadius':          '2',       # limit length of proximity detections
       'Icp/CorrespondenceRatio':   '0.2',     # minimum scan overlap to accept loop closure
