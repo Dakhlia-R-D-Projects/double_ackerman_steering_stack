@@ -47,7 +47,6 @@ def launch_setup(context, *args, **kwargs):
         SetRemap(namespace_str + '/local_costmap/scan', namespace_str + '/scan'),
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(nav2_launch),
-            condition=IfCondition(LaunchConfiguration('localization')),
             launch_arguments=[
                   ('use_sim_time', use_sim_time),
                   ('params_file', nav2_params_file.perform(context)),

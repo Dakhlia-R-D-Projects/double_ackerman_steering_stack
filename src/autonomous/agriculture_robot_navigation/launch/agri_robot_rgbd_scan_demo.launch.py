@@ -46,22 +46,6 @@ def launch_setup(context, *args, **kwargs):
 
     namespace_str = namespace.perform(context)
 
-    nav2 = GroupAction([
-        PushRosNamespace(namespace),
-        SetRemap(namespace_str + '/global_costmap/scan', namespace_str + '/scan'),
-        SetRemap(namespace_str + '/local_costmap/scan', namespace_str + '/scan'),
-        IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(nav2_launch),
-            condition=IfCondition(LaunchConfiguration('localization')),
-            launch_arguments=[
-                  ('use_sim_time', use_sim_time),
-                  ('params_file', nav2_params_file.perform(context)),
-                  ('use_composition', 'False'),
-                  ('namespace', namespace_str)
-                ]
-        ),
-    ])
-
     rviz = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([rviz_launch])
     )
@@ -77,7 +61,7 @@ def launch_setup(context, *args, **kwargs):
         # Nodes to launch
         rviz,
         rtabmap,
-        nav2,
+        # nav2,
     ]
 
 def generate_launch_description():

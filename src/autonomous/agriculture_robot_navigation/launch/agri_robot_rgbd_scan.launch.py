@@ -121,7 +121,8 @@ def generate_launch_description():
             package='rtabmap_slam', executable='rtabmap', output='screen',
             parameters=[parameters,
               {'Mem/IncrementalMemory':'False',
-               'Mem/InitWMWithAllNodes':'True'}],
+               'Mem/InitWMWithAllNodes':'True',
+               'initial_pose':'5.0 -4.6 0 0 0 -1.57'}], # set initial pose x y z roll pitch yaw
             remappings=remappings_slam),
 
         # Node(
