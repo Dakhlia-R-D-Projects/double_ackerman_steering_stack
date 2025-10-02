@@ -46,13 +46,13 @@ controller_server:
       plugin: "nav2_dynamic_window_pure_pursuit_controller::DynamicWindowPurePursuitController" # change here to use DWPP plugin
       desired_linear_vel: 2.0 # DWPP parameter
       desired_angular_vel: 0.2 # DWPP parameter
-      max_linear_accel: 0.25 # DWPP parameter
-      max_angular_accel: 0.25 # DWPP parameter
+      max_linear_accel: 1.25 # DWPP parameter
+      max_angular_accel: 1.05 # DWPP parameter
       velocity_feedback: "OPEN_LOOP"
       lookahead_dist: 2.0
       min_lookahead_dist: 0.3
       max_lookahead_dist: 2.0
-      lookahead_time: 2.0
+      lookahead_time: 10.0
       rotate_to_heading_angular_vel: 1.8
       transform_tolerance: 0.2
       use_velocity_scaled_lookahead_dist: true # use adaptive pure pursuit
@@ -60,14 +60,14 @@ controller_server:
       approach_velocity_scaling_dist: 0.6
       use_collision_detection: false
       max_allowed_time_to_collision_up_to_carrot: 1.0
-      use_regulated_linear_velocity_scaling: true # use regulated pure pursuit
+      use_regulated_linear_velocity_scaling: false # use regulated pure pursuit
       use_fixed_curvature_lookahead: false
       curvature_lookahead_dist: 0.25
-      use_cost_regulated_linear_velocity_scaling: true # use regulated pure pursuit
+      use_cost_regulated_linear_velocity_scaling: false # use regulated pure pursuit
       cost_scaling_dist: 0.3
       cost_scaling_gain: 1.0
-      regulated_linear_scaling_min_radius: 0.9
-      regulated_linear_scaling_min_speed: 0.25
+      regulated_linear_scaling_min_radius: 0.1
+      regulated_linear_scaling_min_speed: 1.0
       use_rotate_to_heading: false # DWPP does not need rotation to heading
       allow_reversing: false
       rotate_to_heading_min_angle: 0.785
