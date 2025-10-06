@@ -1,11 +1,11 @@
 # Double Ackerman Steering Stack for Agriculture Robot
 
-[![ROS 2](https://img.shields.io/badge/ROS-2%20Humble-blue)](https://docs.ros.org/en/humble/)
+[![ROS 2](https://img.shields.io/badge/ROS-2%20jazzy-blue)](https://docs.ros.org/en/jazzy/)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 
 ## 📋 Overview
 
-This repository contains a complete ROS 2 stack for an autonomous agricultural robot with **double Ackerman steering** (four-wheel independent steering). The system is designed for autonomous navigation in agricultural environments, specifically tailored for row-crop operations such as maize field navigation.
+This repository contains a complete ROS 2 stack for an autonomous agricultural robot with **double Ackerman steering**. The system is designed for autonomous navigation in agricultural environments, specifically tailored for row-crop operations such as maize field navigation.
 
 ### Key Features
 
@@ -15,7 +15,6 @@ This repository contains a complete ROS 2 stack for an autonomous agricultural r
 - **Agricultural Environment Simulation**: Procedurally generated maize field environments using Gazebo
 - **Advanced Path Planning**: Multiple controller options including Dynamic Window Pure Pursuit and Vector Pursuit
 - **Obstacle Detection**: Stereo vision-based obstacle detection and avoidance
-- **Teleoperation**: Manual control capability via joystick interface
 
 ---
 
@@ -29,10 +28,8 @@ This repository contains a complete ROS 2 stack for an autonomous agricultural r
   - Wheel Radius: 0.4 m
 - **Mass**: ~464 kg (base) + additional components
 - **Sensors**:
-  - 2x Stereo RGB-D Cameras (left and right)
+  - 2x ZED2i Stereo RGB-D Cameras (left and right)
   - Joint state sensors for all steering and drive joints
-  - IMU (integrated in sensor suite)
-
 ### Main Components
 
 ```
@@ -74,8 +71,7 @@ Core navigation package providing Nav2 integration for agricultural robots.
 - `config/nav2.yaml`: Nav2 parameter configuration
 - `config/slam.yaml`: SLAM Toolbox configuration
 - `launch/agri_robot_autonomous_operation.launch.py`: Main autonomous navigation launch
-- `launch/slam_async.launch.py`: Asynchronous SLAM launch
-- `launch/agri_robot_rgbd_scan.launch.py`: RGBD sensor processing
+- `launch/agri_robot_rgbd_scan_demo.launch.py`: RGBD sensor processing
 
 ### 2. **Robot_urdf**
 Complete robot description package including URDF models, Gazebo plugins, and control interfaces.
@@ -138,11 +134,6 @@ Procedural generation of realistic agricultural environments for testing and val
 - Gazebo Classic integration
 - Realistic plant models and terrain
 
-**Usage:**
-```bash
-ros2 launch virtual_maize_field generate_world.launch.py
-```
-
 ### 6. **rtabmap** and **rtabmap_ros**
 Real-Time Appearance-Based Mapping for 3D SLAM using stereo cameras.
 
@@ -153,60 +144,47 @@ Real-Time Appearance-Based Mapping for 3D SLAM using stereo cameras.
 - Visual odometry
 - Multi-session mapping support
 
-**Modes:**
-- Asynchronous SLAM (high-speed operation)
-- Synchronous SLAM (precise mapping)
-
 ### 7. **teb_local_planner**
 Time-Elastic Band local planner with Ackerman steering support.
 
 **Features:**
-- Support for car-like robots
+- Support for tractor-like robots
+- Trailed sprayer with autonomous driving
 - Dynamic obstacle avoidance
 - Trajectory optimization
-- Cmd_vel to Ackerman drive conversion script
-
-### 8. **teleop_twist_joy**
-Joystick-based teleoperation interface.
-
-**Features:**
-- Manual control override
-- Safety deadman switch
-- Velocity scaling
-- Compatible with standard gaming controllers
-
+- Cmd_vel to double Ackerman drive conversion script
 ---
 
 ## 🚀 Installation
 
 ### Prerequisites
 
-- **OS**: Ubuntu 22.04 (Jammy)
-- **ROS 2**: Humble Hawksbill
-- **Gazebo**: Gazebo Classic 11
+- **OS**: Ubuntu 24.04
+- **ROS 2**: jazzy jalesco
+- **Gazebo**: Gazebo harmonic
 - **Python**: 3.10+
 
 ### Dependencies
 
 ```bash
 # Install ROS 2 Humble (if not already installed)
-# Follow: https://docs.ros.org/en/humble/Installation.html
+# Follow: https://docs.ros.org/en/jazzy/Installation.html
 
 # Install required ROS 2 packages
 sudo apt update
 sudo apt install -y \
-  ros-humble-desktop \
-  ros-humble-navigation2 \
-  ros-humble-nav2-bringup \
-  ros-humble-slam-toolbox \
-  ros-humble-robot-state-publisher \
-  ros-humble-joint-state-publisher-gui \
-  ros-humble-gazebo-ros-pkgs \
-  ros-humble-xacro \
-  ros-humble-joy \
-  ros-humble-teleop-twist-joy \
-  ros-humble-tf2-tools \
-  ros-humble-rtabmap-ros
+  ros-jazzy-desktop \
+  ros-jazzy-navigation2 \
+  ros-jazzy-nav2-bringup \
+  ros-jazzy-slam-toolbox \
+  ros-jazzy-robot-state-publisher \
+  ros-jazzy-joint-state-publisher-gui \
+  ros-jazzy-gazebo-ros-pkgs \
+  ros-jazzy-xacro \
+  ros-jazzy-joy \
+  ros-jazzy-teleop-twist-joy \
+  ros-jazzy-tf2-tools \
+  ros-jazzy-rtabmap-ros
 ```
 
 ### Build Instructions
@@ -226,7 +204,7 @@ rosdep install --from-paths src --ignore-src -r -y
 
 3. **Build the workspace:**
 ```bash
-colcon build --symlink-install
+colcon build --symlink-install --cmake-args -DRTABMAP_SYNC_MULTI_RGBD=ON -DRTABMAP_SYNC_USER_DATA=ON -DCMAKE_BUILD_TYPE=Release
 ```
 
 4. **Source the workspace:**
@@ -285,19 +263,7 @@ goal_pose.pose.orientation.w = 1.0
 navigator.goToPose(goal_pose)
 ```
 
-### 3. Manual Teleoperation
-
-```bash
-# Launch teleoperation node
-ros2 launch teleop_twist_joy teleop-launch.py
-
-# Use joystick controls:
-# - Left stick: Linear velocity
-# - Right stick: Angular velocity
-# - Hold deadman button (typically L1/LB) to enable movement
-```
-
-### 4. SLAM Mapping
+### 3. SLAM Mapping
 
 #### Create a new map:
 ```bash
