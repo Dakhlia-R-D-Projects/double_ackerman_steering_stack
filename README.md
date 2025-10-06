@@ -449,14 +449,14 @@ For issues, questions, or contributions:
 
 ## 🔄 Version History
 
-### Version 1.0.5 (Current - October 2025)
+### Version 1.0.0 (Current - October 2025)
 - Initial release with full double Ackerman steering support
 - Nav2 integration with custom controllers
 - RTAB-Map SLAM implementation
 - Virtual maize field simulation
 - Stereo camera-based obstacle detection
-- Teleoperation support
-
+- Dynamic obstcles avoidance
+- working odometry system
 ---
 
 **Note**: This project is under active development. Features and APIs may change. Please check the repository regularly for updates.
