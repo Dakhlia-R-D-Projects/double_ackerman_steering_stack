@@ -179,12 +179,11 @@ sudo apt install -y \
   ros-jazzy-slam-toolbox \
   ros-jazzy-robot-state-publisher \
   ros-jazzy-joint-state-publisher-gui \
-  ros-jazzy-gazebo-ros-pkgs \
   ros-jazzy-xacro \
   ros-jazzy-joy \
   ros-jazzy-teleop-twist-joy \
   ros-jazzy-tf2-tools \
-  ros-jazzy-rtabmap-ros
+  ros-jazzy-gz-*
 ```
 
 ### Build Instructions
