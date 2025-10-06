@@ -44,7 +44,7 @@ controller_server:
       stateful: True
     FollowPath:
       plugin: "nav2_dynamic_window_pure_pursuit_controller::DynamicWindowPurePursuitController" # change here to use DWPP plugin
-      desired_linear_vel: 2.0 # DWPP parameter
+      desired_linear_vel: 3.0 # DWPP parameter
       desired_angular_vel: 0.2 # DWPP parameter
       max_linear_accel: 1.25 # DWPP parameter
       max_angular_accel: 1.05 # DWPP parameter
@@ -196,7 +196,7 @@ planner_server:
       tolerance: 2.0                      # dist-to-goal heuristic cost (distance) for valid tolerance endpoints if exact goal cannot be found.
       allow_unknown: true                 # allow traveling in unknown space
       max_iterations: 1000000             # maximum total iterations to search for before failing (in case unreachable), set to -1 to disable
-      max_on_approach_iterations: 1000000    # Maximum number of iterations after within tolerances to continue to try to find exact solution
+      max_on_approach_iterations: 1000000 # Maximum number of iterations after within tolerances to continue to try to find exact solution
       max_planning_time: 5.0              # max time in s for planner to plan, smooth
       motion_model_for_search: "DUBIN"    # Hybrid-A* Dubin, Redds-Shepp
       angle_quantization_bins: 72         # Number of angle bins for search
