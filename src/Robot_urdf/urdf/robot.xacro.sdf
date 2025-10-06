@@ -953,7 +953,7 @@
     <plugin
       filename="gz-sim-ackermann-steering-system"
       name="gz::sim::systems::AckermannSteering">
-      <steer_p_gain>1.0</steer_p_gain>
+      <steer_p_gain>2.0</steer_p_gain>
       <left_joint>drive_front_right_link_j</left_joint>
       <left_joint>drive_back_left_link_j</left_joint>
       <right_joint>drive_front_left_link_j</right_joint>
