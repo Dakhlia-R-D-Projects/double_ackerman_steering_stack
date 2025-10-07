@@ -132,35 +132,33 @@ The odometry is calculated using the kinematic model of double Ackerman steering
 
   $$
   \begin{gather}
-   δ_{front_avg} = (δ_{fl} + δ_{fr}) / 2 \\
-   δ_{rear_avg }= (δ_{rl} + δ_{rr}) / 2 \\
-   v_{front_avg} = (v_{fl} + v_{fr}) / 2 \\
-   v_{rear_avg }= (v_{rl} + v_{rr}) / 2 \\
+   δ_{front_{avg}} = (δ_{fl} + δ_{fr}) / 2 \\
+   δ_{rear_{avg}}= (δ_{rl} + δ_{rr}) / 2 \\
+   v_{front_{avg}} = (v_{fl} + v_{fr}) / 2 \\
+   v_{rear_{avg}}= (v_{rl} + v_{rr}) / 2
   \end{gather}
   $$
 
 4. **Calculate Robot Velocities:**
 
-For straight motion (δ ≈ 0):
-  
+  For straight motion (δ ≈ 0):
   $$
   \begin{gather}
-    ω = 0 \\
-    v_x = v_{longitudinal} \\
-    v_y = 0 \\
+   ω = 0 \\
+   v_x = v_{longitudinal} \\
+   v_y = 0 \\
   \end{gather}
   $$
 
-For turning:
-
+  For turning:
   $$
   \begin{gather}
-    ω = (v_front × sin(δ_front) - v_rear × sin(δ_rear)) / L \\
-    v_x = v_longitudinal × cos((δ_front + δ_rear) / 4) \\
-    v_y = v_longitudinal × sin((δ_front - δ_rear) / 4) \\
+    ω = (v_{front} × sin(δ_{front}) - v_{rear} × sin(δ_{rear})) / L \\
+    v_x = v_{longitudinal} × cos((δ_{front} + δ_{rear}) / 4) \\
+    v_y = v_{longitudinal} × sin((δ_{front} - δ_{rear}) / 4) \\
   \end{gather}
   $$
-  
+
   where L is the wheelbase
 
 5. **Integrate to Get Pose:**
