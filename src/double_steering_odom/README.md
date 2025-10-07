@@ -126,8 +126,6 @@ The odometry is calculated using the kinematic model of double Ackerman steering
   \end{gather}
   $$
 
-  where r is the wheel radius
-
 3. **Calculate Average Values:**
 
   $$
@@ -152,7 +150,7 @@ The odometry is calculated using the kinematic model of double Ackerman steering
   $$
 
   For turning:
-  
+
   $$
   \begin{gather}
     ω = (v_{front} × sin(δ_{front}) - v_{rear} × sin(δ_{rear})) / L \\
@@ -160,8 +158,6 @@ The odometry is calculated using the kinematic model of double Ackerman steering
     v_y = v_{longitudinal} × sin((δ_{front} - δ_{rear}) / 4) \\
   \end{gather}
   $$
-
-  where L is the wheelbase
 
 5. **Integrate to Get Pose:**
    
