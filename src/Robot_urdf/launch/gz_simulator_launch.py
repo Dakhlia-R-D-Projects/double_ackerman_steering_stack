@@ -10,7 +10,9 @@ from launch_ros.parameter_descriptions import ParameterValue
 from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from pathlib import Path
+from launch_ros.substitutions import FindPackageShare
 from launch.conditions import IfCondition
 
 def has_nvidia_gpu():
@@ -47,6 +49,25 @@ def generate_launch_description():
     params_file = os.path.join(bringup_dir, 'config', 'double_ackerman_params.yaml')
     with open(sdf_file, 'r') as infp:
         robot_desc = infp.read()
+
+    vel_driver_param_path_arg = DeclareLaunchArgument(
+        'vel_driver_param_path',
+        default_value=PathJoinSubstitution([
+            FindPackageShare('vel_driver'),
+            'config',
+            'vel_driver.yaml'
+        ]),
+        description='Path to the vel_driver parameter file'
+    )
+
+    # Create the node
+    vel_driver_node = Node(
+        package='vel_driver',
+        executable='vel_driver_node',
+        name='vel_driver',
+        output='screen',
+        parameters=[LaunchConfiguration('vel_driver_param_path')]
+    )
 
     start_robot_state_publisher_cmd = Node(
         package='robot_state_publisher',
@@ -143,14 +164,7 @@ def generate_launch_description():
     tf_map= Node(
         package='tf2_ros',
         executable='static_transform_publisher',
-        arguments= ["0", "0", "0", "0", "0", "0", "map", "odom"])
-    
-        # Create a node action for the controller
-    controller_node = Node(
-        package='Robot_urdf',
-        executable='steering_commander',
-        name='steering_commander',
-        output='screen',
+        arguments= ["0", "0", "0", "0", "0", "0", "map", "odom"]
     )
     
     ld.add_action(DeclareLaunchArgument('use_sim_time',default_value='True',description='Use sim time if true'))
@@ -164,5 +178,6 @@ def generate_launch_description():
     ld.add_action(start_robot_state_publisher_cmd)
     ld.add_action(tf_map)
     ld.add_action(joint_state_publisher)
-    # ld.add_action(controller_node)
+    ld.add_action(vel_driver_param_path_arg)
+    ld.add_action(vel_driver_node)
     return ld
