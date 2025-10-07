@@ -110,27 +110,31 @@ Successfully created a complete ROS2 package (`double_steering_odom`) that calcu
   **For straight motion**
 
   $$
-  \begin{aligned}
+  \begin{gather}
   \omega &= 0 \\
   v_x &= v_{longitudinal} \\
   v_y &= 0
-  \end{aligned}
+  \end{gather}
   $$
 
   **For turning**
 
   $$
+    \begin{gather}
      ω = \frac{(v_{front} × sin(δ_{front}) - v_{rear} × sin(δ_{rear}))}{ wheelbase} \\
      v_x = v_{longitudinal} × cos(\frac{δ_{front} + δ_{rear}}{4})\\
      v_y = v_{longitudinal} × sin(\frac{(δ_{front} - δ_{rear})}{4})\\
+    \end{gather}
   $$
 
 5. **Integrate to Get Pose:**
   $$
+  \begin{gather}
    Δx = (v_x × cos(θ) - v_y × sin(θ)) × Δt \\
    Δy = (v_x × sin(θ) + v_y × cos(θ)) × Δt \\
    Δθ = ω × Δt \\
    Update: x, y, θ
+  \end{gather}
   $$
 
 ### Output (Published Topics & TF)
