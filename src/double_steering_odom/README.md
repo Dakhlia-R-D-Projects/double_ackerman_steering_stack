@@ -152,6 +152,7 @@ For straight motion (δ ≈ 0):
   $$
 
 For turning:
+
   $$
   \begin{gather}
     ω = (v_front × sin(δ_front) - v_rear × sin(δ_rear)) / L \\
@@ -159,6 +160,7 @@ For turning:
     v_y = v_longitudinal × sin((δ_front - δ_rear) / 4) \\
   \end{gather}
   $$
+  
   where L is the wheelbase
 
 5. **Integrate to Get Pose:**
