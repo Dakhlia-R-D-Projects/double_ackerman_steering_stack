@@ -106,14 +106,32 @@ void VelDriver::calculateAckermannAngles(float turning_radius, bool is_front,
     // Ackerman geometry: inner and outer wheel angles differ
     // The wheel on the inside of the turn has a larger steering angle
     float half_track = track_width / 2.0;
+    float abs_radius = std::abs(turning_radius);
+    
+    // Safety check: ensure we don't divide by very small numbers
+    // The inner wheel radius must be greater than half the track width
+    if (abs_radius <= half_track) {
+        RCLCPP_WARN(this->get_logger(), 
+            "Turning radius (%.2f m) too small compared to track width (%.2f m). Setting angles to max.",
+            abs_radius, track_width);
+        // Set to maximum steering angle
+        left_angle = (turning_radius > 0) ? max_steering_angle : -max_steering_angle;
+        right_angle = left_angle * 0.7; // Outer wheel angle is smaller
+        if (!is_front) {
+            left_angle = -left_angle;
+            right_angle = -right_angle;
+        }
+        return;
+    }
     
     if (turning_radius > 0) {
         // Turning left (counter-clockwise)
-        left_angle = std::atan(wheel_base / (turning_radius - half_track));   // inner wheel
-        right_angle = std::atan(wheel_base / (turning_radius + half_track));  // outer wheel
+        // Inner wheel (left) has larger angle, outer wheel (right) has smaller angle
+        left_angle = std::atan(wheel_base / (abs_radius - half_track));   // inner wheel
+        right_angle = std::atan(wheel_base / (abs_radius + half_track));  // outer wheel
     } else {
         // Turning right (clockwise)
-        float abs_radius = std::abs(turning_radius);
+        // Inner wheel (right) has larger angle, outer wheel (left) has smaller angle
         right_angle = std::atan(wheel_base / (abs_radius - half_track));      // inner wheel
         left_angle = std::atan(wheel_base / (abs_radius + half_track));       // outer wheel
         // Make angles negative for right turn
@@ -122,12 +140,13 @@ void VelDriver::calculateAckermannAngles(float turning_radius, bool is_front,
     }
     
     // For rear axle in double Ackerman, angles are opposite sign
+    // This creates the characteristic "crab steering" behavior
     if (!is_front) {
         left_angle = -left_angle;
         right_angle = -right_angle;
     }
     
-    // Clamp to maximum steering angle
+    // Clamp to maximum steering angle for safety
     left_angle = std::max(-max_steering_angle, std::min(max_steering_angle, left_angle));
     right_angle = std::max(-max_steering_angle, std::min(max_steering_angle, right_angle));
 }
@@ -173,8 +192,28 @@ void VelDriver::cmdVelCallback(const geometry_msgs::msg::Twist::SharedPtr msg)
             // Straight line motion
             turning_radius = std::numeric_limits<float>::infinity();
         } else {
+            // For double Ackerman, the instantaneous center of rotation (ICR) 
+            // is located at the intersection of the wheel axes extensions
             // Turning radius = linear_velocity / angular_velocity
+            // But we need to ensure it's kinematically feasible
             turning_radius = v_x / omega;
+            
+            // Calculate minimum turning radius based on maximum steering angle
+            // For double Ackerman: R_min = wheelbase / tan(max_steering_angle)
+            // Using the center of the vehicle as reference
+            float min_turning_radius = wheel_base / std::tan(max_steering_angle);
+            
+            // Add safety margin (half track width) to account for wheel positions
+            float safe_min_radius = min_turning_radius + track_width / 2.0;
+            
+            // Limit the turning radius to kinematically feasible values
+            if (std::abs(turning_radius) < safe_min_radius) {
+                // Requested turn is too tight, limit to minimum feasible radius
+                turning_radius = (turning_radius > 0) ? safe_min_radius : -safe_min_radius;
+                RCLCPP_DEBUG(this->get_logger(), 
+                    "Requested turning radius too tight, limited to %.2f m (min: %.2f m)", 
+                    turning_radius, safe_min_radius);
+            }
         }
         
         // Calculate Ackerman steering angles for front and rear axles
@@ -192,32 +231,58 @@ void VelDriver::cmdVelCallback(const geometry_msgs::msg::Twist::SharedPtr msg)
         
         // Calculate wheel velocities
         // For double Ackerman, all wheels should rotate at velocities that match the turning geometry
-        float wheel_speed_base = v_x / wheel_radius;  // Base wheel angular velocity
         
         if (std::isinf(turning_radius)) {
             // Straight line - all wheels same speed
+            float wheel_speed_base = v_x / wheel_radius;
             cmd_front_left_rotor.data = wheel_speed_base;
             cmd_front_right_rotor.data = wheel_speed_base;
             cmd_rear_left_rotor.data = wheel_speed_base;
             cmd_rear_right_rotor.data = wheel_speed_base;
         } else {
-            // Different speeds for inner and outer wheels
+            // Different speeds for inner and outer wheels during turning
+            // Each wheel travels along a circular arc with radius dependent on its position
             float half_track = track_width / 2.0;
+            float half_wheelbase = wheel_base / 2.0;
             
-            // Calculate distance from vehicle center for each wheel
-            float r_fl = std::sqrt(std::pow(turning_radius - half_track, 2) + std::pow(wheel_base/2.0, 2));
-            float r_fr = std::sqrt(std::pow(turning_radius + half_track, 2) + std::pow(wheel_base/2.0, 2));
-            float r_rl = std::sqrt(std::pow(turning_radius - half_track, 2) + std::pow(wheel_base/2.0, 2));
-            float r_rr = std::sqrt(std::pow(turning_radius + half_track, 2) + std::pow(wheel_base/2.0, 2));
+            // Calculate the actual distance from the instantaneous center of rotation (ICR)
+            // to each wheel contact point
+            // ICR is on the line connecting the midpoints of front and rear axles
+            float abs_turning_radius = std::abs(turning_radius);
             
-            // Wheel speeds proportional to distance from turning center
-            float omega_abs = std::abs(omega);
+            // Distance from ICR to each wheel (using Pythagorean theorem)
+            // For left turn (turning_radius > 0), ICR is on the left side
+            // For right turn (turning_radius < 0), ICR is on the right side
+            float r_fl, r_fr, r_rl, r_rr;
+            
+            if (turning_radius > 0) {
+                // Left turn: left wheels are inner, right wheels are outer
+                r_fl = std::sqrt(std::pow(abs_turning_radius - half_track, 2) + std::pow(half_wheelbase, 2));
+                r_fr = std::sqrt(std::pow(abs_turning_radius + half_track, 2) + std::pow(half_wheelbase, 2));
+                r_rl = std::sqrt(std::pow(abs_turning_radius - half_track, 2) + std::pow(half_wheelbase, 2));
+                r_rr = std::sqrt(std::pow(abs_turning_radius + half_track, 2) + std::pow(half_wheelbase, 2));
+            } else {
+                // Right turn: right wheels are inner, left wheels are outer
+                r_fl = std::sqrt(std::pow(abs_turning_radius + half_track, 2) + std::pow(half_wheelbase, 2));
+                r_fr = std::sqrt(std::pow(abs_turning_radius - half_track, 2) + std::pow(half_wheelbase, 2));
+                r_rl = std::sqrt(std::pow(abs_turning_radius + half_track, 2) + std::pow(half_wheelbase, 2));
+                r_rr = std::sqrt(std::pow(abs_turning_radius - half_track, 2) + std::pow(half_wheelbase, 2));
+            }
+            
+            // Calculate angular velocity about the turning center
+            // omega is already given, but we recalculate from the actual turning radius
+            // to ensure consistency with kinematic constraints
+            float actual_omega = v_x / turning_radius;  // rad/s
+            float omega_abs = std::abs(actual_omega);
+            
+            // Linear velocity at each wheel = radius * angular_velocity
+            // Then convert to wheel angular velocity = linear_velocity / wheel_radius
             cmd_front_left_rotor.data = (r_fl * omega_abs) / wheel_radius;
             cmd_front_right_rotor.data = (r_fr * omega_abs) / wheel_radius;
             cmd_rear_left_rotor.data = (r_rl * omega_abs) / wheel_radius;
             cmd_rear_right_rotor.data = (r_rr * omega_abs) / wheel_radius;
             
-            // Preserve direction of motion
+            // Preserve direction of motion (forward/backward)
             if (v_x < 0) {
                 cmd_front_left_rotor.data = -cmd_front_left_rotor.data;
                 cmd_front_right_rotor.data = -cmd_front_right_rotor.data;

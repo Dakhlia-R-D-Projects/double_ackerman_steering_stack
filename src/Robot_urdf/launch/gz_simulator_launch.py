@@ -164,5 +164,5 @@ def generate_launch_description():
     ld.add_action(start_robot_state_publisher_cmd)
     ld.add_action(tf_map)
     ld.add_action(joint_state_publisher)
-    ld.add_action(controller_node)
+    # ld.add_action(controller_node)
     return ld
