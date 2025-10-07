@@ -108,6 +108,7 @@ Successfully created a complete ROS2 package (`double_steering_odom`) that calcu
 4. **Calculate Robot Velocities:**
 
   **For straight motion**
+
   $$
      ω = 0 \\
      v_x = v_{longitudinal} \\
@@ -115,6 +116,7 @@ Successfully created a complete ROS2 package (`double_steering_odom`) that calcu
   $$
 
   **For turning**
+  
   $$
      ω = \frac{(v_{front} × sin(δ_{front}) - v_{rear} × sin(δ_{rear}))}{ wheelbase} \\
      v_x = v_{longitudinal} × cos(\frac{δ_{front} + δ_{rear}}{4})\\
