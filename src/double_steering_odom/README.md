@@ -112,50 +112,68 @@ All parameters are configured in `config/double_steering_odom.yaml`:
 The odometry is calculated using the kinematic model of double Ackerman steering:
 
 1. **Read Joint States:**
-   - Steering angles: δ_fl, δ_fr, δ_rl, δ_rr (from steering joints)
-   - Wheel angular velocities: ω_fl, ω_fr, ω_rl, ω_rr (from wheel joints)
+   - Steering angles: $ δ_{fl}, δ_{fr}, δ_{rl}, δ_{rr}$ (from steering joints)
+   - Wheel angular velocities: $ ω_{fl}, ω_{fr}, ω_{rl}, ω_{rr} $ (from wheel joints)
 
 2. **Calculate Linear Velocities:**
-   ```
-   v_fl = ω_fl × r
-   v_fr = ω_fr × r
-   v_rl = ω_rl × r
-   v_rr = ω_rr × r
-   ```
-   where r is the wheel radius
+  
+  $$
+  \begin{gather}
+   v_{fl} = ω_{fl} × r \\ 
+   v_{fr} = ω_{fr} × r \\
+   v_{rl} = ω_{rl} × r \\
+   v_{rr} = ω_{rr} × r \\
+  \end{gather}
+  $$
+
+  where r is the wheel radius
 
 3. **Calculate Average Values:**
-   ```
-   δ_front_avg = (δ_fl + δ_fr) / 2
-   δ_rear_avg = (δ_rl + δ_rr) / 2
-   v_front_avg = (v_fl + v_fr) / 2
-   v_rear_avg = (v_rl + v_rr) / 2
-   ```
+
+  $$
+  \begin{gather}
+   δ_{front_avg} = (δ_{fl} + δ_{fr}) / 2 \\
+   δ_{rear_avg }= (δ_{rl} + δ_{rr}) / 2 \\
+   v_{front_avg} = (v_{fl} + v_{fr}) / 2 \\
+   v_{rear_avg }= (v_{rl} + v_{rr}) / 2 \\
+  \end{gather}
+  $$
 
 4. **Calculate Robot Velocities:**
-   ```
-   For straight motion (δ ≈ 0):
-     ω = 0
-     v_x = v_longitudinal
-     v_y = 0
-   
-   For turning:
-     ω = (v_front × sin(δ_front) - v_rear × sin(δ_rear)) / L
-     v_x = v_longitudinal × cos((δ_front + δ_rear) / 4)
-     v_y = v_longitudinal × sin((δ_front - δ_rear) / 4)
-   ```
-   where L is the wheelbase
+
+For straight motion (δ ≈ 0):
+  
+  $$
+  \begin{gather}
+    ω = 0 \\
+    v_x = v_{longitudinal} \\
+    v_y = 0 \\
+  \end{gather}
+  $$
+
+For turning:
+  $$
+  \begin{gather}
+    ω = (v_front × sin(δ_front) - v_rear × sin(δ_rear)) / L \\
+    v_x = v_longitudinal × cos((δ_front + δ_rear) / 4) \\
+    v_y = v_longitudinal × sin((δ_front - δ_rear) / 4) \\
+  \end{gather}
+  $$
+  where L is the wheelbase
 
 5. **Integrate to Get Pose:**
-   ```
-   Δx = (v_x × cos(θ) - v_y × sin(θ)) × Δt
-   Δy = (v_x × sin(θ) + v_y × cos(θ)) × Δt
-   Δθ = ω × Δt
    
-   x += Δx
-   y += Δy
+  $$
+  \begin{gather}
+   Δx = (v_x × cos(θ) - v_y × sin(θ)) × Δt \\
+   Δy = (v_x × sin(θ) + v_y × cos(θ)) × Δt \\
+   Δθ = ω × Δt \\
+   
+   x += Δx \\
+   y += Δy \\
    θ += Δθ
-   ```
+  \end{gather}
+  $$
 
 ### Key Assumptions
 

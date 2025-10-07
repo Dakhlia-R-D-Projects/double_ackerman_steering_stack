@@ -109,5 +109,3 @@ Shows detailed velocity and pose calculations.
 Full docs: `src/double_steering_odom/README.md`
 
 ---
-**Built successfully ✅**  
-**Ready to use! 🚜**

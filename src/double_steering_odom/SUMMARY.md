@@ -88,22 +88,27 @@ Successfully created a complete ROS2 package (`double_steering_odom`) that calcu
 ### Processing (Odometry Calculation)
 
 1. **Extract Joint Data:**
-   - Steering angles: δ_fl, δ_fr, δ_rl, δ_rr
-   - Wheel angular velocities: ω_fl, ω_fr, ω_rl, ω_rr
+
+   - Steering angles: $ δ_{fl}, δ_{fr}, δ_{rl}, δ_{rr} $
+   - Wheel angular velocities: $ ω_{fl}, ω_{fr}, ω_{rl}, ω_{rr} $
    - (Calculates velocities from position if not provided)
 
 2. **Calculate Linear Velocities:**
-   ```
-   v_wheel = ω_wheel × wheel_radius
-   ```
+  
+  $$
+   v_{wheel} = ω_{wheel} × wheel_{radius}
+  $$
 
 3. **Average Front/Rear Values:**
-   ```
-   δ_front_avg = (δ_fl + δ_fr) / 2
-   δ_rear_avg = (δ_rl + δ_rr) / 2
-   v_front_avg = (v_fl + v_fr) / 2
-   v_rear_avg = (v_rl + v_rr) / 2
-   ```
+
+  $$
+  \begin{gather}
+   δ_{front_{avg}} &= (δ_{fl} + δ_{fr}) / 2 \\
+   δ_{rear_{avg}}&= (δ_{rl} + δ_{rr}) / 2 \\
+   v_{front_{avg}} &= (v_{fl} + v_{fr}) / 2 \\
+   v_{rear_{avg}}&= (v_{rl} + v_{rr}) / 2
+  \end{gather}
+  $$
 
 4. **Calculate Robot Velocities:**
 
@@ -112,7 +117,7 @@ Successfully created a complete ROS2 package (`double_steering_odom`) that calcu
   $$
   \begin{gather}
   \omega &= 0 \\
-  v_x &= v_{longitudinal} \\
+  v_x &=  v_{longitudinal} \\
   v_y &= 0
   \end{gather}
   $$
@@ -128,6 +133,7 @@ Successfully created a complete ROS2 package (`double_steering_odom`) that calcu
   $$
 
 5. **Integrate to Get Pose:**
+
   $$
   \begin{gather}
    Δx = (v_x × cos(θ) - v_y × sin(θ)) × Δt \\
