@@ -142,6 +142,7 @@ The odometry is calculated using the kinematic model of double Ackerman steering
 4. **Calculate Robot Velocities:**
 
   For straight motion (δ ≈ 0):
+
   $$
   \begin{gather}
    ω = 0 \\
@@ -151,6 +152,7 @@ The odometry is calculated using the kinematic model of double Ackerman steering
   $$
 
   For turning:
+  
   $$
   \begin{gather}
     ω = (v_{front} × sin(δ_{front}) - v_{rear} × sin(δ_{rear})) / L \\
