@@ -106,26 +106,28 @@ Successfully created a complete ROS2 package (`double_steering_odom`) that calcu
    ```
 
 4. **Calculate Robot Velocities:**
-   ```
-   For straight motion:
-     ω = 0
-     v_x = v_longitudinal
-     v_y = 0
-   
-   For turning:
-     ω = (v_front × sin(δ_front) - v_rear × sin(δ_rear)) / wheelbase
-     v_x = v_longitudinal × cos((δ_front + δ_rear) / 4)
-     v_y = v_longitudinal × sin((δ_front - δ_rear) / 4)
-   ```
+
+  **For straight motion**
+  $$
+     ω = 0 \\
+     v_x = v_{longitudinal} \\
+     v_y = 0 \\
+  $$
+
+  **For turning**
+  $$
+     ω = \frac{(v_{front} × sin(δ_{front}) - v_{rear} × sin(δ_{rear}))}{ wheelbase} \\
+     v_x = v_{longitudinal} × cos(\frac{δ_{front} + δ_{rear}}{4})\\
+     v_y = v_{longitudinal} × sin(\frac{(δ_{front} - δ_{rear})}{4})\\
+  $$
 
 5. **Integrate to Get Pose:**
-   ```
-   Δx = (v_x × cos(θ) - v_y × sin(θ)) × Δt
-   Δy = (v_x × sin(θ) + v_y × cos(θ)) × Δt
-   Δθ = ω × Δt
-   
+  $$
+   Δx = (v_x × cos(θ) - v_y × sin(θ)) × Δt \\
+   Δy = (v_x × sin(θ) + v_y × cos(θ)) × Δt \\
+   Δθ = ω × Δt \\
    Update: x, y, θ
-   ```
+  $$
 
 ### Output (Published Topics & TF)
 
@@ -393,18 +395,3 @@ The same code works on real hardware:
 - Ensure joint_states published by robot's control system
 - Verify joint names match
 - Calibrate wheel radius if needed
-
-## 🎉 Summary
-
-You now have a **complete, working odometry system** for your double Ackerman steering robot that:
-
-✅ Reads joint states from 8 joints (4 steering + 4 wheels)  
-✅ Calculates accurate odometry using double Ackerman kinematics  
-✅ Publishes standard /odom messages  
-✅ Broadcasts TF transforms  
-✅ Fully configurable via YAML  
-✅ Well documented  
-✅ Built successfully  
-✅ Ready to use  
-
-The package is production-ready and follows ROS2 best practices! 🚜
