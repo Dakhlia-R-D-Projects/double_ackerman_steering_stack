@@ -1,0 +1,41 @@
+double_steering_odom:
+  ros__parameters:
+    # Robot physical parameters (should match your robot's actual dimensions)
+    wheel_base: 2.39        # Distance between front and rear axles [m]
+    track_width: 1.34       # Distance between left and right wheels [m]
+    wheel_radius: 0.4       # Wheel radius [m]
+    
+    # Update rate configuration
+    min_update_rate: 10.0   # Minimum expected update rate in Hz (affects time step validation)
+                            # Set based on your joint_states publication rate
+                            # Higher values = more strict time validation
+                            # Lower values = more tolerant to slow updates
+    
+    # Topic names
+    joint_state_topic: /joint_states
+    odom_topic: /wheel_odom
+    
+    # Frame IDs
+    odom_frame: odom
+    base_frame: base_link
+    
+    # TF publishing configuration
+    # Set to 'true' to publish the transform from odom_frame to base_frame
+    # Set to 'false' if:
+    #   - Using robot_localization or another sensor fusion package
+    #   - Another node is already publishing this transform
+    #   - You want to manually control the TF tree
+    # Default: true (this node will publish odom->base_link transform)
+    publish_tf: true
+    
+    # Joint names for steering joints (continuous, measures steering angle in radians)
+    fl_steer_joint: steer_front_left_link_j
+    fr_steer_joint: steer_front_right_link_j
+    rl_steer_joint: steer_rear_left_link_j
+    rr_steer_joint: steer_rear_right_link_j
+    
+    # Joint names for wheel joints (continuous, measures wheel rotation in radians)
+    fl_wheel_joint: drive_front_left_link_j
+    fr_wheel_joint: drive_front_right_link_j
+    rl_wheel_joint: drive_rear_left_link_j
+    rr_wheel_joint: drive_rear_right_link_j
