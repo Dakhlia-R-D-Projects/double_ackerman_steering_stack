@@ -153,9 +153,9 @@ The odometry is calculated using the kinematic model of double Ackerman steering
 
   $$
   \begin{gather}
-    ω = (v_{front} × sin(δ_{front}) - v_{rear} × sin(δ_{rear})) / L \\
-    v_x = v_{longitudinal} × cos((δ_{front} + δ_{rear}) / 4) \\
-    v_y = v_{longitudinal} × sin((δ_{front} - δ_{rear}) / 4) \\
+   ω = (v_{front} × sin(δ_{front}) - v_{rear} × sin(δ_{rear})) / L \\
+   v_x = v_{longitudinal} × cos((δ_{front} + δ_{rear}) / 4) \\
+   v_y = v_{longitudinal} × sin((δ_{front} - δ_{rear}) / 4) \\
   \end{gather}
   $$
 
@@ -163,13 +163,12 @@ The odometry is calculated using the kinematic model of double Ackerman steering
    
   $$
   \begin{gather}
-   Δx = (v_x × cos(θ) - v_y × sin(θ)) × Δt \\
-   Δy = (v_x × sin(θ) + v_y × cos(θ)) × Δt \\
-   Δθ = ω × Δt \\
-   
-   x += Δx \\
-   y += Δy \\
-   θ += Δθ
+    Δx = (v_x × cos(θ) - v_y × sin(θ)) × Δt \\
+    Δy = (v_x × sin(θ) + v_y × cos(θ)) × Δt \\
+    Δθ = ω × Δt \\
+    x += Δx \\
+    y += Δy \\
+    θ += Δθ
   \end{gather}
   $$
 
