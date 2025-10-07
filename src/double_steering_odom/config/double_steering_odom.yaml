@@ -16,7 +16,7 @@ double_steering_odom:
     odom_topic: /wheel_odom
     
     # Frame IDs
-    odom_frame: odom
+    odom_frame: odom_wheel
     base_frame: base_link
     
     # TF publishing configuration
