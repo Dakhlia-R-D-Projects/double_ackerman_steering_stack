@@ -110,11 +110,11 @@ Successfully created a complete ROS2 package (`double_steering_odom`) that calcu
   **For straight motion**
 
   $$
-     ω = 0 \\ 
-
-     v_x = v_{longitudinal} \\ 
-     
-     v_y = 0 \\ 
+  \begin{aligned}
+  \omega &= 0 \\
+  v_x &= v_{longitudinal} \\
+  v_y &= 0
+  \end{aligned}
   $$
 
   **For turning**
