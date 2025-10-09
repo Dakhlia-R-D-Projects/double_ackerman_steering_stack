@@ -87,7 +87,7 @@ local_costmap:
       width: 5
       height: 5
       resolution: 0.06
-      footprint: "[ [1.0, 1.0], [1.0, -1.0], [-1.0, -1.0], [-1.0, 1.0] ]"
+      footprint: "[ [3.0, 1.0], [3.0, -1.0], [-1.0, -1.0], [-1.0, 1.0] ]"
       always_send_full_costmap: true
       plugins: ["static_layer", "voxel_layer", "inflation_layer","obstacle_layer"]
       inflation_layer:
@@ -346,7 +346,24 @@ collision_monitor:
     stop_pub_timeout: 1.0
     # Polygons represent zone around the robot for "stop", "slowdown" and "limit" action types,
     # and robot footprint for "approach" action type.
-    polygons: ["FootprintApproach"]
+    polygons: ["PolygonStop", "PolygonSlow", "FootprintApproach"]
+    PolygonSlow:
+      type: "polygon"
+      points: "[[4.0, 1.0], [4.0, -1.0], [-1.0, -1.0], [-1.0, 1.0]]"
+      action_type: "slowdown"
+      min_points: 4  # max_points: 3 for Humble
+      slowdown_ratio: 0.3
+      visualize: True
+      polygon_pub_topic: "polygon_slowdown"
+      enabled: True
+    PolygonStop:
+      type: "polygon"
+      points: "[[3.0, 1.0], [3.0, -1.0], [-1.0, -1.0], [-1.0, 1.0]]"
+      action_type: "stop"
+      min_points: 4  # max_points: 3 for Humble
+      visualize: True
+      polygon_pub_topic: "polygon_stop"
+      enabled: True
     FootprintApproach:
       type: "polygon"
       action_type: "approach"
