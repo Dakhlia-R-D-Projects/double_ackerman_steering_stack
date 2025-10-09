@@ -2,7 +2,7 @@ bt_navigator:
   ros__parameters:
     enable_stamped_cmd_vel: false
     default_nav_to_pose_bt_xml: /home/ebrahim/double_ackerman_steering_stack/src/autonomous/agriculture_robot_navigation/config/bt.xml
-    default_nav_through_poses_bt_xml: /home/ebrahim/double_ackerman_steering_stack/src/autonomous/agriculture_robot_navigation/config/bt.xml
+    default_nav_through_poses_bt_xml: /home/ebrahim/double_ackerman_steering_stack/src/autonomous/agriculture_robot_navigation/config/bt_poses.xml
     global_frame: map
     robot_base_frame: base_link
     odom_topic: odom
@@ -307,7 +307,8 @@ behavior_server:
 
 waypoint_follower:
   ros__parameters:
-    enable_stamped_cmd_vel: false
+    enable_stamped_cmd_vel: true
+    global_frame_id: "map"
     loop_rate: 20
     stop_on_failure: false
     action_server_result_timeout: 900.0
