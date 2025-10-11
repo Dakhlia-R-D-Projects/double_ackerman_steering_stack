@@ -1,0 +1,44 @@
+/**:
+  ros__parameters:
+    rgbd_cameras: 2
+    frame_id: base_link
+    odom_frame_id: odom
+    use_sim_time: true
+    odom_tf_linear_variance: 0.001
+    odom_tf_angular_variance: 0.001
+    subscribe_odom_info: False
+    subscribe_rgbd: True
+    subscribe_rgb: False
+    subscribe_depth: False
+    subscribe_scan: False
+    odom_sensor_sync: True
+    approx_sync: False
+    sync_queue_size: 20
+    Rtabmap/DetectionRate: "1" # 1Hz
+    Grid/Sensor: "1"                     # 0=Laser 1=RGBD 2=laser+RGBD
+    Vis/EstimationType: "0"                #[Motion estimation approach: 0:3D->3D 1:3D->2D (PnP) 2:2D->2D (Epipolar Geometry)]
+    RGBD/NeighborLinkRefining: 'true'    # Do odometry correction with consecutive laser scans
+    RGBD/ProximityBySpace:     'true'    # Local loop closure detection (using estimated position) with locations in WM
+    RGBD/ProximityByTime:      'false'   # Local loop closure detection with locations in STM
+    RGBD/ProximityPathMaxNeighbors: '10' # Do also proximity detection by space by merging close scans together.
+    Reg/Strategy:              '2'       # 0=Visual 1=ICP 2=Visual+ICP
+    Vis/MinInliers:            '12'      # 3D visual words minimum inliers to accept loop closure
+    RGBD/OptimizeFromGraphEnd: 'true'    # Optimize graph from initial node so /map -> /odom transform will be generated
+    RGBD/OptimizeMaxError:     '4'       # Reject any loop closure causing large errors (>3x link's covariance) in the map
+    Reg/Force3DoF:             'true'    # 2D SLAM
+    RGBD/CreateOccupancyGrid:  'true'    # Create 2D occupancy grid from RGBD
+    Grid/RayTracing:            'true'    # Enable ray tracing for occupancy grid
+    Grid/CellSize:              "0.05"   # Occupancy grid cell size in meters
+    Mem/STMSize:               '30'      # increased to 30 to avoid adding too many loop closures on just seen locations
+    RGBD/LocalRadius:          '2'       # limit length of proximity detections
+    Icp/CorrespondenceRatio:   '0.2'     # minimum scan overlap to accept loop closure
+    Icp/PM:                    'false'
+    Icp/PointToPlane:          'true'    # Use point-to-plane ICP
+    Icp/MaxCorrespondenceDistance: '0.15'
+    Icp/VoxelSize:             '0.2'
+    Rtabmap/DetectionRate: "5" # 5Hz
+    Grid/NoiseFilteringMinNeighbors: "5" # 2D occupancy grid noise filtering
+    Grid/RangeMax: "20.0" # 2D occupancy grid max range
+    GridGlobal/FootprintRadius: "0.55" # 2D occupancy grid robot footprint radius
+    GTSAM/Optimizer: '1' # 0=Levenberg 1=GaussNewton 2=Dogleg
+    GTSAM/Incremental: "true"
